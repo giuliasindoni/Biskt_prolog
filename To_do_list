@@ -1,0 +1,3 @@
+To do list:
+
+1) Add a predicate "add_if_new" to add new formulae to the branch. This would only add formulae that are not already present in the branch
