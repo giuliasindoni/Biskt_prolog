@@ -1,3 +1,11 @@
+# Repository Info
+
+This is a [link](www.google.com) to google.
+
+This is a `code` word.
+
+See more examples [here](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
 biskt_19_june_working: this file is working. However, the rule for true implication is not finished, and the modalities need to be added. 
 
 
