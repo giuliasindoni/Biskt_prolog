@@ -196,11 +196,15 @@ showlist_ind([H|T]) :- write('     '), write(H), nl, showlist_ind(T).
 
 applying( Rule ):- write('Applying: '), write(Rule), nl.
 
+example(1, [i:(and(eneg(nneg(p1)), p2 ) = t), h(i,j), h(w,v) ],
+        v:(and(p1, eneg(nneg(p2))) = t)
+        ).
 
-example( 1, 
-  [s:( and( eneg(nneg(x)), y ) = t ), h(s,z), h(w,m)],  
-          m:( and( x, eneg(nneg(y)) ) =t )
-       ).
+
+%example( 1, 
+ % [s:( and( eneg(nneg(x)), y ) = t ), h(s,z), h(w,m)],  
+  %        m:( and( x, eneg(nneg(y)) ) =t )
+   %    ).
 
 example( 2,
          [w:(q=t)],
@@ -234,7 +238,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(2).
+run :- run(1).
 
 :-  initialization(run). 
 
