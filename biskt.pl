@@ -98,7 +98,7 @@ refute(Formulae, [t_whitebox | Rules]) :-
 refute(Formulae, [f_blackdia | Rules]) :-
       select(S: ( blackdia(Phi) = f), Formulae, Rest),
       member(r(T, S), Rest),
-      \+(member(T: (Phi = f), Rest), !,
+      \+(member(T: (Phi = f), Rest)), !,
       applying(f_blackdia),
       refute([T: (Phi = f) | Formulae], Rules).
 
