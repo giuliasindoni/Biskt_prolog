@@ -94,6 +94,15 @@ refute(Formulae, [t_whitebox | Rules]) :-
        refute([T: (Phi = t) | Formulae ], Rules). 
 
 
+%% False black diamond
+refute(Formulae, [f_blackdia | Rules]) :-
+      select(S: ( blackdia(Phi) = f), Formulae, Rest),
+      member(r(T, S), Rest),
+      \+(member(T: (Phi = f), Rest), !,
+      applying(f_blackdia),
+      refute([T: (Phi = f) | Formulae], Rules).
+
+
 
 %% Frame rule for h relation
 
