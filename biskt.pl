@@ -85,6 +85,14 @@ refute( Formulae, [f_eneg_s | Rules] ) :-
         applying(f_eneg_s),
         refute( [S:(Phi=t) | Formulae], Rules ).
 
+%% True white box 
+refute(Formulae, [t_whitebox | Rules]) :-
+       select( S: (whitebox(Phi) = t), Formulae, Rest),
+       member(r(S, T), Rest),
+       \+(member( T: (Phi = t), Rest)), !,
+       applying(t_whitebox ),
+       refute([T: (Phi = t) | Formulae ], Rules). 
+
 
 
 %% Frame rule for h relation
