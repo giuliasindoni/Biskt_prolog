@@ -187,9 +187,10 @@ refute( Formulae, [f_imp | Rules] ) :-
 
 %% False white box
 %% do we need to keep the formula 
-%% S: (whitebox(Phi) = f? If so 
+%% S: (whitebox(Phi) = f in the branch? If so 
 %% we will need to refute [_ | Formulae]
-%% instead of Rest
+%% instead of [_ | Rest]
+%% in the last, recursive line
 
 refute(Formulae, [f_whitebox | Rules]) :-
         select(S: (whitebox(Phi) = f), Formulae, Rest),
