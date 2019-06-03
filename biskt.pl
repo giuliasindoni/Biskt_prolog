@@ -103,7 +103,6 @@ refute(Formulae, [f_blackdia | Rules]) :-
       refute([T: (Phi = f) | Formulae], Rules).
 
 
-
 %% Frame rule for h relation
 
 %% Monotonicity of truth wrt h
@@ -123,6 +122,7 @@ refute( Formulae, [h_trans | Rules] ) :-
       !,
       applying( h_trans ), 
       refute( [h(S,U) | Formulae], Rules ).
+
 
 
 %% BRANCHING RULES ----------------------------
@@ -184,6 +184,21 @@ refute( Formulae, [f_imp | Rules] ) :-
         applying( f_imp ),
         W1 = @(imp(Phi,Psi),W),
         refute( [h(W,W1), h(W,W), W1:(Phi=t), W1:(Psi=f) | Rest], Rules ). 
+
+%% False white box
+%% do we need to keep the formula 
+%% S: (whitebox(Phi) = f? If so 
+%% we will need to refute [_ | Formulae]
+%% instead of Rest
+
+refute(Formulae, [f_whitebox | Rules]) :-
+        select(S: (whitebox(Phi) = f), Formulae, Rest),
+        !,
+        applying(f_whitebox),
+        T =  @(whitebox(Phi),S),
+        refute([r(S, T), T: (Phi = f) | Rest], Rules). 
+
+
 
 
 
