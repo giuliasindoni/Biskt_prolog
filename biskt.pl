@@ -59,12 +59,12 @@ refute( Formulae, [t_nneg | Rules] ) :-
         refute( [T:(Phi=f) | Formulae], Rules ).
 
 % %% True node first negation --- special case with T=S
-% refute( Formulae, [t_nneg_s | Rules] ) :-
-%         select( S:(nneg(Phi)=t), Formulae, Rest ),
-%         \+( member( S:(Phi=f), Rest ) ),
-%         !,
-%         applying(t_nneg_s),
-%         refute( [S:(Phi=f) | Rest], Rules ).
+ refute( Formulae, [t_nneg_s | Rules] ) :-
+         select( S:(nneg(Phi)=t), Formulae, Rest ),
+         \+( member( S:(Phi=f), Rest ) ),
+         !,
+         applying(t_nneg_s),
+         refute( [S:(Phi=f) | Rest], Rules ).
 
 
 %% False edge first negation
@@ -353,7 +353,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(11).
+run :- run(6).
 
 :-  initialization(run). 
 
