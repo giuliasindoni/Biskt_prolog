@@ -212,9 +212,7 @@ refute( Formulae, [t_eneg | Rules] ) :-
 
 %% False implication
 refute( Formulae, [f_imp | Rules] ) :-
-        write(looking_for_f_imp_formula),
         select( W:(imp(Phi,Psi)=f), Formulae, Rest ),
-        write('** HERE **'),
         !,
         applying( f_imp ),
         W1 = @(imp(Phi,Psi),W),
