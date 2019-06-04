@@ -89,8 +89,9 @@ refute( Formulae, [f_eneg_s | Rules] ) :-
 refute(Formulae, [t_whitebox | Rules]) :-
        select( S: (whitebox(Phi) = t), Formulae, Rest),
        member(r(S, T), Rest),
-       \+(member( T: (Phi = t), Rest)), !,
+       \+(member( T: (Phi = t), Rest)), !, %% Check not already present
        applying(t_whitebox ),
+       %% append( Rest, [S: (whitebox(Phi) = t)], RearrangedFormulae ), % moved the active formula to end 
        refute([T: (Phi = t) | Formulae ], Rules). 
 
 
@@ -98,9 +99,27 @@ refute(Formulae, [t_whitebox | Rules]) :-
 refute(Formulae, [f_blackdia | Rules]) :-
       select(S: ( blackdia(Phi) = f), Formulae, Rest),
       member(r(T, S), Rest),
-      \+(member(T: (Phi = f), Rest)), !,
+      \+(member(T: (Phi = f), Rest)), !, %% Check not already present
       applying(f_blackdia),
       refute([T: (Phi = f) | Formulae], Rules).
+
+%% True universal box
+refute(Formulae, [t_ubox| Rules]) :-
+      select( _S: (ubox(Phi) = t),  Formulae, Rest),
+      member( T: (_), Formulae), %% Here we look for the formulae in Formulae and not in Rest because the world S with the ubox has to be considered as well
+      \+(member( T: (Phi = t), Rest)), %% Check not already present
+      !,
+      applying(t_ubox),
+      refute([T: (Phi = t) | Formulae], Rules).
+
+%% False universal diamond
+refute(Formulae, [f_udia| Rules]) :-
+       select( _S: (udia(Phi) = f), Formulae, Rest),
+       member( T: ( _ ), Formulae),
+       \+(member( T: (Phi = f), Rest)),
+       !,
+       applying(f_udia),
+       refute([T: (Phi = f)], Rules). 
 
 
 %% Frame rule for h relation
@@ -129,9 +148,9 @@ refute( Formulae, [h_trans | Rules] ) :-
 %% r is stable
 
 refute(Formulae, [r_stable | Rules]) :-
-      member(r(S, T), Formulae),
+      member(h(S, T), Formulae),
       member(r(T, Z), Formulae),
-      member(r(Z, Y), Formulae),
+      member(h(Z, Y), Formulae),
       \+(member(r(S, Y), Formulae)), %% Check not already present
       !,
       applying(r_stable),
@@ -193,7 +212,9 @@ refute( Formulae, [t_eneg | Rules] ) :-
 
 %% False implication
 refute( Formulae, [f_imp | Rules] ) :-
+        write(looking_for_f_imp_formula),
         select( W:(imp(Phi,Psi)=f), Formulae, Rest ),
+        write('** HERE **'),
         !,
         applying( f_imp ),
         W1 = @(imp(Phi,Psi),W),
@@ -213,6 +234,7 @@ refute(Formulae, [f_whitebox | Rules]) :-
         T =  @(whitebox(Phi),S),
         refute([r(S, T), T: (Phi = f) | Rest], Rules). 
 
+%% TRUE black dia
 
 refute(Formulae, [t_blackdia | Rules]) :-
       select(S: (blackdia(Phi) = t), Formulae, Rest),
@@ -232,6 +254,10 @@ refute( Formulae, _ ) :- !,
       showlist_ind( Formulae), nl, nl,
       fail.
 %%---------------------------------
+
+first_to_last( [],[]).
+
+first_to_last( [H|T], L) :- append(T,[H], L).
 
 add_labels_h_reflexivity( [], [] ).
 
@@ -281,7 +307,8 @@ example(5, [],
 
 
 
-example(6, [i: (imp( (nneg(eneg(p))), (eneg(eneg(p))))) = f ], inconsistent).
+example(6, [i: (imp( (nneg(eneg(p))), (eneg(eneg(p)))) = f) ], 
+             inconsistent).
 
 
 
@@ -305,6 +332,7 @@ example(12, [],
 
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
+       write(proving(EgN)),
        ( Conclusion = inconsistent 
          ->
          FormulaSet = Premisses
@@ -314,7 +342,9 @@ prove( EgN, Rules ) :-
            FormulaSet = [ S:(Phi=ForT) | Premisses ]
          )
        ),
+       write('Adding labels for h reflexivity ...'),
        add_labels_h_reflexivity( FormulaSet, FormulaSet_withReflexH ),
+       write('Added labels for h reflexivity'),
        refute( FormulaSet_withReflexH, Rules ).
 
 
@@ -325,7 +355,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(10).
+run :- run(11).
 
 :-  initialization(run). 
 
