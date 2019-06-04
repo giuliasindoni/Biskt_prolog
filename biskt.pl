@@ -237,10 +237,13 @@ showlist_ind([H|T]) :- write('     '), write(H), nl, showlist_ind(T).
 
 applying( Rule ):- write('Applying: '), write(Rule), nl.
 
-example(1, 
+example(0, 
         [i:(and(eneg(nneg(p1)), p2 ) = t), h(j,i), h(j,v) ],
         v:(and(p1, eneg(nneg(p2))) = t)
         ).
+
+example(1, [],
+           i: (imp(p, eneg(nneg(p)) ) = t) ).
 
 
 example( 2,
@@ -267,12 +270,23 @@ example(5, [],
 example(6, [i: (imp( (nneg(eneg(p))), (eneg(eneg(p))))) = f ], inconsistent).
 
 
-example(7,  [i:((imp(p,p))=f)],
-          inconsistent
-          ).
-
 
 example(8, [], (i: (imp((nneg(eneg(p))), (eneg(eneg(p))))) = t)).
+
+example(9, [], 
+           i: (imp(blackdia(whitebox(p)) ,p) = t)).
+
+
+example(10, [],
+             i: (imp(p, whitebox(blackdia(p))) = t) ).
+
+
+example(11, [],
+             i: (imp((blackdia(or(p1, p2))) , (or(blackdia(p1) ,blackdia(p2) ) )) = t)  ).
+
+example(12, [],
+            i:(imp((or(blackdia(p1) ,blackdia(p2))), (blackdia(or(p1, p2)))) = t )).
+
 
 
 prove( EgN, Rules ) :-
@@ -297,7 +311,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(6).
+run :- run(12).
 
 :-  initialization(run). 
 
