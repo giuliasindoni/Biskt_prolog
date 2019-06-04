@@ -124,6 +124,20 @@ refute( Formulae, [h_trans | Rules] ) :-
       refute( [h(S,U) | Formulae], Rules ).
 
 
+%% Frame rules for r relation
+
+%% r is stable
+
+refute(Formulae, [r_stable | Rules]) :-
+      member(r(S, T), Formulae),
+      member(r(T, Z), Formulae),
+      member(r(Z, Y), Formulae),
+      \+(member(r(S, Y), Formulae)), %% Check not already present
+      !,
+      applying(r_stable),
+      refute([r(S, Y) | Formulae], Rules).
+
+
 
 %% BRANCHING RULES ----------------------------
 
@@ -311,7 +325,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(10).
 
 :-  initialization(run). 
 
