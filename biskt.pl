@@ -200,6 +200,14 @@ refute(Formulae, [f_whitebox | Rules]) :-
         refute([r(S, T), T: (Phi = f) | Rest], Rules). 
 
 
+refute(Formulae, [t_blackdia | Rules]) :-
+      select(S: (blackdia(Phi) = t), Formulae, Rest),
+      !,
+      applying(t_blackdia),
+      T = @(blackdia(Phi),S),
+      refute([r(T, S) , T: (Phi = t) | Rest], Rules).
+
+
 
 
 
@@ -289,7 +297,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(5).
+run :- run(6).
 
 :-  initialization(run). 
 
