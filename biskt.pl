@@ -104,6 +104,9 @@ refute(Formulae, [f_blackdia | Rules]) :-
       refute([T: (Phi = f) | Formulae], Rules).
 
 %% True universal box
+%% need to fix this rule: we need to refute Formulae in the last line
+%% but this causes loops
+
 refute(Formulae, [t_ubox| Rules]) :-
       select( _S: (ubox(Phi) = t),  Formulae, Rest),
       member( T: (_), Formulae), %% Here we look for the formulae in Formulae and not in Rest because the world S with the ubox has to be considered as well
@@ -113,13 +116,16 @@ refute(Formulae, [t_ubox| Rules]) :-
       refute([T: (Phi = t) | Formulae], Rules).
 
 %% False universal diamond
+%% need to fix this rule: we need to refute Formulae in the last line
+%% but this causes loops
+
 refute(Formulae, [f_udia| Rules]) :-
        select( _S: (udia(Phi) = f), Formulae, Rest),
-       member( T: ( _ ), Formulae),
-       \+(member( T: (Phi = f), Rest)),
-       !,
-       applying(f_udia),
-       refute([T: (Phi = f)], Rules). 
+         member( T: ( _ ), Formulae),
+         \+(member( T: (Phi = f), Rest)),
+         !,
+         applying(f_udia),
+         refute([T: (Phi = f) | Formulae], Rules). 
 
 
 %% Frame rule for h relation
@@ -326,22 +332,25 @@ example(6, [i: (imp( (nneg(eneg(p))), (eneg(eneg(p)))) = f) ],
              inconsistent).
 
 
+example(7, [], i: (imp( nneg(eneg(p)), eneg(eneg(p)))  = t) ).
 
-example(8, [], (i: (imp((nneg(eneg(p))), (eneg(eneg(p))))) = t)).
-
-example(9, [], 
+example(8, [], 
            i: (imp(blackdia(whitebox(p)) ,p) = t)).
 
 
-example(10, [],
+example(9, [],
              i: (imp(p, whitebox(blackdia(p))) = t) ).
 
 
-example(11, [],
+example(10, [],
              i: (imp((blackdia(or(p1, p2))) , (or(blackdia(p1) ,blackdia(p2) ) )) = t)  ).
 
-example(12, [],
+example(11, [],
             i:(imp((or(blackdia(p1) ,blackdia(p2))), (blackdia(or(p1, p2)))) = t )).
+
+
+example(12, [], i: (imp(udia(and( eneg(nneg(p1)) , p2) ), udia(and(p1, eneg(nneg(p2))) ) )  = t)).
+
 
 
 
@@ -357,9 +366,7 @@ prove( EgN, Rules ) :-
            FormulaSet = [ S:(Phi=ForT) | Premisses ]
          )
        ),
-       write('Adding labels for h reflexivity ...'),
        add_labels_h_reflexivity( FormulaSet, FormulaSet_withReflexH ),
-       write('Added labels for h reflexivity'),
        refute( FormulaSet_withReflexH, Rules ).
 
 
@@ -370,7 +377,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(6).
+run :- run(12).
 
 :-  initialization(run). 
 
