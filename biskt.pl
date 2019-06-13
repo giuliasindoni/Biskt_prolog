@@ -232,7 +232,7 @@ refute(Formulae, [f_whitebox | Rules]) :-
         T =  @(whitebox(Phi),S),
         refute([r(S, T), T: (Phi = f) | Rest], Rules). 
 
-%% TRUE black dia
+%% True black dia
 
 refute(Formulae, [t_blackdia | Rules]) :-
       select(S: (blackdia(Phi) = t), Formulae, Rest),
@@ -241,7 +241,24 @@ refute(Formulae, [t_blackdia | Rules]) :-
       T = @(blackdia(Phi),S),
       refute([r(T, S) , T: (Phi = t) | Rest], Rules).
 
+%% False universal box
 
+refute(Formulae, [f_ubox | Rules]) :-
+       select(S: (ubox(Phi) = f), Formulae, Rest),
+       !,
+       applying(f_ubox),
+       T = @(ubox(Phi),S),
+       refute([T: (Phi = f) | Rest], Rules).
+
+
+%% True universal diamond
+
+refute(Formulae, [t_udia | Rules]) :- 
+       select(S:(udia(Phi) = t), Formulae, Rest),
+       !,
+       applying(t_udia),
+       T = @(udia(Phi), S),
+       refute([T: (Phi = t) | Rest], Rules).
 
 
 
