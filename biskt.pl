@@ -85,6 +85,7 @@ refute( Formulae, [f_eneg_s | Rules] ) :-
         applying(f_eneg_s),
         refute( [S:(Phi=t) | Formulae], Rules ).
 
+
 %% True white box 
 refute(Formulae, [t_whitebox | Rules]) :-
        select( S: (whitebox(Phi) = t), Formulae, Rest),
@@ -217,12 +218,14 @@ refute( Formulae, [t_eneg | Rules] ) :-
         refute( [h(T,S), h(T,T), T:(Phi=f) | Rest], Rules ). 
 
 %% False implication
-refute( Formulae, [f_imp | Rules] ) :-
+ refute( Formulae, [f_imp | Rules] ) :-
         select( W:(imp(Phi,Psi)=f), Formulae, Rest ),
         !,
         applying( f_imp ),
         W1 = @(imp(Phi,Psi),W),
-        refute( [h(W,W1), h(W,W), W1:(Phi=t), W1:(Psi=f) | Rest], Rules ). 
+        refute( [h(W,W1), h(W1,W1), W1:(Phi=t), W1:(Psi=f) | Rest], Rules ). 
+
+
 
 %% False white box
 %% do we need to keep the formula 
@@ -377,7 +380,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(6).
+run :- run(9).
 
 :-  initialization(run). 
 
