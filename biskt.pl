@@ -236,7 +236,7 @@ refute(Formulae, [f_whitebox | Rules]) :-
         !,
         applying(f_whitebox),
         T =  @(whitebox(Phi),S),
-        refute([r(S, T), T: (Phi = f) | Rest], Rules). 
+        refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules). 
 
 %% True black dia
 
@@ -245,7 +245,7 @@ refute(Formulae, [t_blackdia | Rules]) :-
       !,
       applying(t_blackdia),
       T = @(blackdia(Phi),S),
-      refute([r(T, S) , T: (Phi = t) | Rest], Rules).
+      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules).
 
 %% False universal box
 
@@ -254,7 +254,7 @@ refute(Formulae, [f_ubox | Rules]) :-
        !,
        applying(f_ubox),
        T = @(ubox(Phi),S),
-       refute([T: (Phi = f) | Rest], Rules).
+       refute([T: (Phi = f), h(T,T) | Rest], Rules).
 
 
 %% True universal diamond
@@ -264,7 +264,7 @@ refute(Formulae, [t_udia | Rules]) :-
        !,
        applying(t_udia),
        T = @(udia(Phi), S),
-       refute([T: (Phi = t) | Rest], Rules).
+       refute([T: (Phi = t), h(T, T) | Rest], Rules).
 
 
 
@@ -377,7 +377,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(6).
 
 :-  initialization(run). 
 
