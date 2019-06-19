@@ -22,6 +22,12 @@ refute( Formulae, [false_is_t_close] ) :-
       member( _:(false=t), Formulae ), !,
       applying( false_is_t_close ).
 
+%% TEST WITH PROPERTY NOT EQUALITY
+
+%%refute(Formulae, [not_equal]) :-
+  %%     member( not_id(S, S), Formulae), !,
+    %%   applying(not_equal).
+
 %% NON-BRANCHING RULES
 
 %% True conjunction
@@ -204,6 +210,28 @@ refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
         applying(t_imp),
         refute( ['B1', W2:(Phi=f) | Formulae], Rules1 ), 
         refute( ['B2', W2:(Psi=t) | Formulae], Rules2 ).
+
+%% TEST WITH H-SUCCESOR BLOCKING RULE ----------------------------------
+
+%% refute(Formulae, [h_blocking | Rules]) :-
+%%       member(h(S, T), Formulae),
+    %%   \+(member( id(S, T), Formulae)),
+    %%   \+(member( not_id(S, T), Formulae)),
+     %%   !,
+     %%   applying(h_blocking),
+     %%  refute(['B1', id(S, T) | Formulae], Rules),
+     %%  refute(['B2', not_id(S, T) | Formulae], Rules).
+
+%% TEST WITH MODIFIED VERSION FOR H-SUCCESOR BLOCKING
+
+%%refute(Formulae, [h_blocking | Rules]) :-
+ %%      member(h(S, T), Formulae),
+ %%      \+(member( (S = T), Formulae)),
+ %%      \+(member( (S \= T), Formulae)),
+ %%      !,
+ %%      applying(h_blocking),
+ %%      refute(['B1', (S = T) | Formulae], Rules),
+ %%      refute(['B2', (S \= T) | Formulae], Rules).
 
 
 %% CREATING RULES ------------------------------------
@@ -391,7 +419,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(13).
+run :- run(12).
 
 :-  initialization(run). 
 
