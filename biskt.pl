@@ -23,10 +23,17 @@ refute( Formulae, [false_is_t_close] ) :-
       applying( false_is_t_close ).
 
 %% TEST WITH PROPERTY NOT EQUALITY
+%% TO GO WITH H-SUCCESOR BLOCKING
 
 %%refute(Formulae, [not_equal]) :-
   %%     member( not_id(S, S), Formulae), !,
     %%   applying(not_equal).
+
+%%refute(Formulae, [not_equal]) :-
+%%    member( S \= S, Formulae), !,
+ %%   applying(not_equal).
+
+
 
 %% NON-BRANCHING RULES
 
@@ -225,13 +232,13 @@ refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
 %% TEST WITH MODIFIED VERSION FOR H-SUCCESOR BLOCKING
 
 %%refute(Formulae, [h_blocking | Rules]) :-
- %%      member(h(S, T), Formulae),
- %%      \+(member( (S = T), Formulae)),
- %%      \+(member( (S \= T), Formulae)),
- %%      !,
- %%      applying(h_blocking),
- %%      refute(['B1', (S = T) | Formulae], Rules),
- %%      refute(['B2', (S \= T) | Formulae], Rules).
+%%      member(h(S, T), Formulae),
+%%       \+(member( (S = T), Formulae)),
+%%       \+(member( (S \= T), Formulae)),
+%%       !,
+%%       applying(h_blocking),
+%%       refute(['B1', (S = T) | Formulae], Rules),
+%%       refute(['B2', (S \= T) | Formulae], Rules).
 
 
 %% CREATING RULES ------------------------------------
