@@ -85,6 +85,8 @@ refute( Formulae, [f_eneg_s | Rules] ) :-
         applying(f_eneg_s),
         refute( [S:(Phi=t) | Formulae], Rules ).
 
+%%is it ok to use cut? 
+%%will this stop to find all the worlds that are R-successor of the world where box formula is?
 
 %% True white box 
 refute(Formulae, [t_whitebox | Rules]) :-
@@ -106,7 +108,10 @@ refute(Formulae, [f_blackdia | Rules]) :-
 
 %% True universal box
 %% need to fix this rule: we need to refute Formulae in the last line
-%% but this causes loops
+%% but this causes loops.
+%% Also: is it ok to put the cut?
+%% will this stop us in finding all the worlds in the node? 
+
 
 refute(Formulae, [t_ubox| Rules]) :-
       select( _S: (ubox(Phi) = t),  Formulae, Rest),
@@ -179,10 +184,12 @@ refute( Formulae, [t_dis, [t_dis_B1 | Rules1], [d_dis_B2 | Rules2] ] ) :-
 %% False conjunction
 refute( Formulae, [f_con, [f_con_B1 | Rules1], [f_com_B2 | Rules2] ] ) :-
         select( S:(and(Phi,Psi)=f), Formulae, Rest ),
+        \+(member(S:(Phi = f), Rest)),
+        \+(member(S: (Psi =f), Rest)),
         !,
         applying(f_con),
-        refute( [S:(Phi=f) | Rest], Rules1 ), 
-        refute( [S:(Psi=f) | Rest], Rules2 ).
+        refute( [S:(Phi=f) | Formulae], Rules1 ), 
+        refute( [S:(Psi=f) | Formulae], Rules2 ).
 
 %% True implications
 %% We keep the implication in case it needs to be used again.
@@ -306,6 +313,12 @@ example(0,
         v:(and(p1, eneg(nneg(p2))) = t)
         ).
 
+example(01,
+          [i: (and(eneg(nneg(p1)) ,p2) = t), v: ( and(p1, eneg(nneg(p2))) = f) , h(t,i), h(t,v) ],
+          inconsistent).
+
+
+
 example(1, [],
            i: (imp(p, eneg(nneg(p)) ) = t) ).
 
@@ -355,8 +368,6 @@ example(11, [],
 example(12, [], i: (imp(udia(and( eneg(nneg(p1)) , p2) ), udia(and(p1, eneg(nneg(p2))) ) )  = t)).
 
 
-
-
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
        write(proving(EgN)),
@@ -380,7 +391,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(9).
+run :- run(13).
 
 :-  initialization(run). 
 
