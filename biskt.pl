@@ -208,6 +208,7 @@ refute( Formulae, [f_con, [f_con_B1 | Rules1], [f_com_B2 | Rules2] ] ) :-
 %% We keep the implication in case it needs to be used again.
 %% But the rule is blocked if either of the alternative new formulae
 %% is already present in the branch.
+%% do not we need the special case for S =T as well?
 refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
         select( W:(imp(Phi,Psi)=t), Formulae, Rest ),
         member( h(W,W2), Rest ),
