@@ -42,8 +42,10 @@ refute( Formulae, [false_is_t_close] ) :-
 %% conjuncts (at same world)
 refute( Formulae, [t_con | Rules] ) :-
         select( S:(and(Phi,Psi)=t), Formulae, Rest ), !,
+        \+(member(S:(Phi = t), Rest));
+        \+(member(S: (Psi =t), Rest)),
         applying( t_con ),
-        refute( [S:(Phi=t), S:(Psi=t) | Rest], Rules ).
+        refute( [S:(Phi=t), S:(Psi=t) | Formulae], Rules ).
 
 %% False disjunction
 %% Remove false disjunctive formula and replace by its 
