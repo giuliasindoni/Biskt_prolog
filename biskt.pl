@@ -41,9 +41,10 @@ refute( Formulae, [false_is_t_close] ) :-
 %% Remove true conjunctive formula and replace by its separate 
 %% conjuncts (at same world)
 refute( Formulae, [t_con | Rules] ) :-
-        select( S:(and(Phi,Psi)=t), Formulae, Rest ), !,
+        select( S:(and(Phi,Psi)=t), Formulae, Rest ),
         \+(member(S:(Phi = t), Rest));
         \+(member(S: (Psi =t), Rest)),
+        !,
         applying( t_con ),
         refute( [S:(Phi=t), S:(Psi=t) | Formulae], Rules ).
 
