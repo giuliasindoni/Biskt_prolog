@@ -122,10 +122,8 @@ refute(Formulae, [f_blackdia | Rules]) :-
       applying(f_blackdia),
       refute([T: (Phi = f) | Formulae], Rules).
 
-%% True universal box
-%% need to fix this rule: we need to refute Formulae in the last line
-%% but this causes loops.
-%% Also: is it ok to put the cut?
+%% True everywhere
+%% Is it ok to put the cut?
 %% will this stop us in finding all the worlds in the node? 
 
 
@@ -137,9 +135,7 @@ refute(Formulae, [t_ubox| Rules]) :-
       applying(t_ubox),
       refute([T: (Phi = t) | Formulae], Rules).
 
-%% False universal diamond
-%% need to fix this rule: we need to refute Formulae in the last line
-%% but this causes loops
+%%False somewhere
 
 refute(Formulae, [f_udia| Rules]) :-
        select( _S: (udia(Phi) = f), Formulae, Rest),
