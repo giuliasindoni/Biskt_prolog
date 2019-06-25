@@ -399,8 +399,21 @@ example(10, [],
 example(11, [],
             i:(imp((or(blackdia(p1) ,blackdia(p2))), (blackdia(or(p1, p2)))) = t )).
 
+%% Example12: not sure this actually works: the last rule applied is true conj for some odd reason
+%% it should be tf_close
 
 example(12, [], i: (imp(udia(and( eneg(nneg(p1)) , p2) ), udia(and(p1, eneg(nneg(p2))) ) )  = t)).
+
+
+%%Example 13: try to refute that the formula is false, but it cannot refute%% as model exists
+
+example(13, [], 
+	    i:(ubox(udia(p1)) = t)).
+
+example(14, [], 
+	    i:(ubox(udia(p1)) = f)).
+
+
 
 
 prove( EgN, Rules ) :-
@@ -426,7 +439,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(14).
 
 :-  initialization(run). 
 
