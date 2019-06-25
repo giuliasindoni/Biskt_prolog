@@ -42,8 +42,10 @@ refute( Formulae, [false_is_t_close] ) :-
 %% conjuncts (at same world)
 refute( Formulae, [t_con | Rules] ) :-
         select( S:(and(Phi,Psi)=t), Formulae, Rest ),
-        \+(member(S:(Phi = t), Rest));
-        \+(member(S: (Psi =t), Rest)),
+        ( \+(member(S:(Phi = t), Rest))
+        	;
+          \+(member(S: (Psi =t), Rest))
+        ),
         !,
         applying( t_con ),
         refute( [S:(Phi=t), S:(Psi=t) | Formulae], Rules ).
@@ -241,6 +243,20 @@ refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
 %%       refute(['B2', (S \= T) | Formulae], Rules).
 
 
+
+%% TEST WITH UNIVERSAL BLOCKING RULE
+/*
+refute(Formulae, [u_blocking | Rules]) :-
+       member( S : (_) , Formulae),
+       member( T: (_), Formulae), 
+       \+(member( (S = T), Formulae )),
+      \+(member(( S \= T ), Formulae)),
+       !,
+       applying(u_blocking),
+       refute(['B1', (S = T) | Formulae], Rules),
+       refute(['B2', (S \= T) | Formulae], Rules).
+*/
+
 %% CREATING RULES ------------------------------------
 
 %% False node first negation
@@ -302,14 +318,32 @@ refute(Formulae, [f_ubox | Rules]) :-
        refute([T: (Phi = f), h(T,T) | Rest], Rules).
 
 
-%% True universal diamond
+%% True universal diamond 
+%% destructive version
 
 refute(Formulae, [t_udia | Rules]) :- 
-       select(S:(udia(Phi) = t), Formulae, Rest),
+      select(S:(udia(Phi) = t), Formulae, Rest),
        !,
        applying(t_udia),
        T = @(udia(Phi), S),
-       refute([T: (Phi = t), h(T, T) | Rest], Rules).
+      refute([T: (Phi = t), h(T, T) | Rest], Rules).
+
+
+%% True universal diamond variant1
+%% this is the NON-destructive version of the rule
+%% still not stop the loop of t_udia, t_ubox applications
+%% so this is NOT a good non-destructive and blocking
+%% version of the rule
+
+/*
+refute(Formulae, [t_udia | Rules]) :-
+       select(S: (udia(Phi) = t), Formulae, Rest),
+       \+( member( @(udia(Phi), S):(Phi=t), Rest ) ),
+       !,
+      applying(t_udia),
+       T = @(udia(Phi), S),
+       refute([T: (Phi = t), h(T,T) | Formulae], Rules).
+ */
 
 
 
@@ -413,6 +447,8 @@ example(13, [],
 example(14, [], 
 	    i:(ubox(udia(p1)) = f)).
 
+example(15, [],
+	      i:(udia(p1)=f)).
 
 
 
@@ -439,7 +475,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(14).
+run :- run(12).
 
 :-  initialization(run). 
 
