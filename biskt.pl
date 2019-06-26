@@ -221,27 +221,28 @@ refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
         refute( ['B2', W2:(Psi=t) | Formulae], Rules2 ).
 
 %% TEST WITH H-SUCCESOR BLOCKING RULE ----------------------------------
-
-%% refute(Formulae, [h_blocking | Rules]) :-
-%%       member(h(S, T), Formulae),
-    %%   \+(member( id(S, T), Formulae)),
-    %%   \+(member( not_id(S, T), Formulae)),
-     %%   !,
-     %%   applying(h_blocking),
-     %%  refute(['B1', id(S, T) | Formulae], Rules),
-     %%  refute(['B2', not_id(S, T) | Formulae], Rules).
+/*
+ refute(Formulae, [h_blocking | Rules]) :-
+       member(h(S, T), Formulae),
+       \+(member( id(S, T), Formulae)),
+       \+(member( not_id(S, T), Formulae)),
+        !,
+        applying(h_blocking),
+       refute(['B1', id(S, T) | Formulae], Rules),
+       refute(['B2', not_id(S, T) | Formulae], Rules).
+*/
 
 %% TEST WITH MODIFIED VERSION FOR H-SUCCESOR BLOCKING
-
-%%refute(Formulae, [h_blocking | Rules]) :-
-%%      member(h(S, T), Formulae),
-%%       \+(member( (S = T), Formulae)),
-%%       \+(member( (S \= T), Formulae)),
-%%       !,
-%%       applying(h_blocking),
-%%       refute(['B1', (S = T) | Formulae], Rules),
-%%       refute(['B2', (S \= T) | Formulae], Rules).
-
+/*
+refute(Formulae, [h_blocking | Rules]) :-
+      member(h(S, T), Formulae),
+       \+(member( (S = T), Formulae)),
+       \+(member( (S \= T), Formulae)),
+       !,
+       applying(h_blocking),
+       refute(['B1', (S = T) | Formulae], Rules),
+       refute(['B2', (S \= T) | Formulae], Rules).
+*/
 
 
 %% TEST WITH UNIVERSAL BLOCKING RULE
@@ -255,7 +256,7 @@ refute(Formulae, [u_blocking | Rules]) :-
        applying(u_blocking),
        refute(['B1', (S = T) | Formulae], Rules),
        refute(['B2', (S \= T) | Formulae], Rules).
-
+ 
 
 %% CREATING RULES ------------------------------------
 
@@ -317,23 +318,22 @@ refute(Formulae, [f_ubox | Rules]) :-
        T = @(ubox(Phi),S),
        refute([T: (Phi = f), h(T,T) | Rest], Rules).
 
-
+/*
 %% True universal diamond 
 %% destructive version
-/*
+
 refute(Formulae, [t_udia | Rules]) :- 
       select(S:(udia(Phi) = t), Formulae, Rest),
        !,
        applying(t_udia),
        T = @(udia(Phi), S),
       refute([T: (Phi = t), h(T, T) | Rest], Rules).
+
  */
 
 %% True universal diamond variant1
 %% this is the NON-destructive version of the rule
-%% still not stop the loop of t_udia, t_ubox applications
-%% so this is NOT a good non-destructive and blocking
-%% version of the rule
+%% still not finished, example14 does not seem right
 
 
 refute(Formulae, [t_udia | Rules]) :-
@@ -343,8 +343,7 @@ refute(Formulae, [t_udia | Rules]) :-
        !,
       applying(t_udia),
        T = @(udia(Phi), S),
-       refute([T: (Phi = t), h(T,T) | Formulae], Rules).
-
+       refute([T: (Phi = t), h(T, T) | Formulae], Rules).
 
 
 
