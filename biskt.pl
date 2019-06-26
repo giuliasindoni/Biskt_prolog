@@ -245,7 +245,7 @@ refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
 
 
 %% TEST WITH UNIVERSAL BLOCKING RULE
-/*
+
 refute(Formulae, [u_blocking | Rules]) :-
        member( S : (_) , Formulae),
        member( T: (_), Formulae), 
@@ -255,7 +255,7 @@ refute(Formulae, [u_blocking | Rules]) :-
        applying(u_blocking),
        refute(['B1', (S = T) | Formulae], Rules),
        refute(['B2', (S \= T) | Formulae], Rules).
-*/
+
 
 %% CREATING RULES ------------------------------------
 
@@ -320,14 +320,14 @@ refute(Formulae, [f_ubox | Rules]) :-
 
 %% True universal diamond 
 %% destructive version
-
+/*
 refute(Formulae, [t_udia | Rules]) :- 
       select(S:(udia(Phi) = t), Formulae, Rest),
        !,
        applying(t_udia),
        T = @(udia(Phi), S),
       refute([T: (Phi = t), h(T, T) | Rest], Rules).
-
+ */
 
 %% True universal diamond variant1
 %% this is the NON-destructive version of the rule
@@ -335,15 +335,16 @@ refute(Formulae, [t_udia | Rules]) :-
 %% so this is NOT a good non-destructive and blocking
 %% version of the rule
 
-/*
+
 refute(Formulae, [t_udia | Rules]) :-
        select(S: (udia(Phi) = t), Formulae, Rest),
-       \+( member( @(udia(Phi), S):(Phi=t), Rest ) ),
+       T = (@(udia(Phi)), S),
+       \+( member( T: (Phi=t), Rest ) ),
        !,
       applying(t_udia),
        T = @(udia(Phi), S),
        refute([T: (Phi = t), h(T,T) | Formulae], Rules).
- */
+
 
 
 
@@ -475,7 +476,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(14).
 
 :-  initialization(run). 
 
