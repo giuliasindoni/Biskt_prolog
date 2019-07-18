@@ -242,7 +242,7 @@ refute(Formulae, [h_blocking | Rules]) :-
        applying(h_blocking),
        refute(['B1', (S = T) | Formulae], Rules),
        refute(['B2', (S \= T) | Formulae], Rules).
-*/
+
 
 
 %% TEST WITH UNIVERSAL BLOCKING RULE
@@ -256,7 +256,7 @@ refute(Formulae, [u_blocking | Rules]) :-
        applying(u_blocking),
        refute(['B1', (S = T) | Formulae], Rules),
        refute(['B2', (S \= T) | Formulae], Rules).
- 
+ */
 
 %% CREATING RULES ------------------------------------
 
@@ -318,7 +318,7 @@ refute(Formulae, [f_ubox | Rules]) :-
        T = @(ubox(Phi),S),
        refute([T: (Phi = f), h(T,T) | Rest], Rules).
 
-/*
+
 %% True universal diamond 
 %% destructive version
 
@@ -329,8 +329,9 @@ refute(Formulae, [t_udia | Rules]) :-
        T = @(udia(Phi), S),
       refute([T: (Phi = t), h(T, T) | Rest], Rules).
 
- */
 
+
+/*
 %% True universal diamond variant1
 %% this is the NON-destructive version of the rule
 %% still not finished, example14 does not seem right
@@ -344,7 +345,7 @@ refute(Formulae, [t_udia | Rules]) :-
       applying(t_udia),
        T = @(udia(Phi), S),
        refute([T: (Phi = t), h(T, T) | Formulae], Rules).
-
+ */
 
 
 %% -------------------------------------
@@ -475,7 +476,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(14).
+run :- run(12).
 
 :-  initialization(run). 
 
