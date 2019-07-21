@@ -23,6 +23,10 @@ has_available_formula( State, Formula ) :-
           ob_prop_val( State, available, Formulae ),
           member( Formula, Formulae ).
 
+has_used_formula(State, Formula) :-
+                 ob_prop_val(State, used, Formulae),
+                 member(Formula, Formulae).
+
 %% The following rule specifies when a relational formula is available
 
 has_relational_formula(State, Rel_formula) :-
@@ -39,19 +43,22 @@ consume_formula( State, Formula, NewState ):-
            set_ob_prop_val( State, available, Rest, NewState1 ),
            set_ob_prop_val( NewState1, used, [Formula | FU], NewState ).
 
+
 add_formula_to_available( State, Formula, NewState ) :-
             ob_prop_val( State, available, FA ),
             set_ob_prop_val( State, available, [Formula | FA], NewState ).
 
 
 
+
 /*
+
 add_formula_to_available( State, Formula, NewState ) :-
             ob_prop_val( State, available, Available ),
             ( member(Formula, Available) ->  
               NewState = State
               ;   
-              set_ob_prop_val( State, available, [Formula | FA], NewState )
+              set_ob_prop_val( State, available, [Formula | Available], NewState )
             ), !.
 
 add_formula_if_new(State, Formula, NewState ) :-
@@ -63,6 +70,7 @@ add_formula_if_new(State, Formula, NewState ) :-
             ), !.
 
 */
+
 
 add_rel_formula_to_relations(State, Rel_formula, NewState) :-
                              ob_prop_val(State, relations, Rel_formulae),
@@ -92,9 +100,9 @@ refute(State, [false_is_true]) :-
 
 refute( State, [t_con | Rules] ):-
       consume_formula( State, S:(and(Phi,Psi)=t), NewState1 ),
-      ((\+ (has_available_formula(State,  S:(Phi=t))) )
-       ;
-       (\+ (has_available_formula(State, S:(Psi = t))) )),
+     %% ((\+ (has_available_formula(State,  S:(Phi=t))) )
+     %%  ;
+     %%  (\+ (has_available_formula(State, S:(Psi = t))) )),
       add_formula_to_available( NewState1, S:(Phi=t), NewState2 ),
       add_formula_to_available( NewState2, S:(Psi=t), Newstate3 ),
       !,
@@ -201,18 +209,22 @@ refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
       has_available_formula( State, T: (_)),
       (\+(has_available_formula(State, T: (Phi = t)))),
+      (\+(has_used_formula(State, T: (Phi = t)))),
       add_formula_to_available(State, T:(Phi = t), NewState1),
       !,
       applying(t_ubox),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
 
+%%(\+(has_available_formula(State, T: (Phi = t)))),
+
 %% Universal Diamond false
 
 refute(State, [f_udia | Rules]) :-
       has_available_formula(State, _S:(udia(Phi) = f)),
       has_available_formula( State, T: (_)),
-      (\+(has_available_formula(State, T: (Phi = f)))),
+     (\+(has_available_formula(State, T: (Phi = f)))),
+     (\+(has_used_formula(State, T: (Phi = t)))),
       add_formula_to_available(State, T:(Phi = f), NewState1),
       !,
       applying(f_udia),
@@ -238,11 +250,15 @@ test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i),
 
 test_object3( [available = [i: (eneg(p1) = f)], used=[], relations = [h(j,i), h(i,i)] ] ).
 
-test_object4( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], relations = [r(i,i)] ] ).
+test_object4( [available = [i: (wbox(p1) = t), i:(bdia(p2) = f)], used=[], relations = [r(i, j), r(i,i)] ] ).
 
-test_object5( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [r(i,i)] ] ).
+test_object5( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], relations = [r(i,i)] ] ).
 
-test_object6( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
+test_object6( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [r(i,i)] ] ).
+
+test_object7( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
+
+
 
 
 
