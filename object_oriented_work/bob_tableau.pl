@@ -204,7 +204,7 @@ refute(State, [f_bdia | Rules]) :-
       refute(NewState1, Rules).
 
 %% Universal Box true
-/*
+
 refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
       has_available_formula( State, T: (_)),
@@ -215,8 +215,8 @@ refute(State, [t_ubox | Rules]) :-
       applying(t_ubox),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
-*/
 
+/*
 refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
       has_available_formula( State, T: (_)),
@@ -237,7 +237,7 @@ refute(State, [t_ubox | Rules]) :-
       applying(t_ubox),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
-
+*/
 
 
 %% Universal Diamond false
