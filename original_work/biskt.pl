@@ -128,7 +128,6 @@ refute(Formulae, [f_blackdia | Rules]) :-
 %% Is it ok to put the cut?
 %% will this stop us in finding all the worlds in the node? 
 
-
 refute(Formulae, [t_ubox| Rules]) :-
       select( _S: (ubox(Phi) = t),  Formulae, Rest),
       member( T: (_), Formulae), %% Here we look for the formulae in Formulae and not in Rest because the world S with the ubox has to be considered as well
