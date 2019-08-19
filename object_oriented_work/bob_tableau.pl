@@ -5,7 +5,6 @@
 % or
 % [available = [.., ..], used = [...., ... ], relations = ???]
 
-
 ob_prop_val( Object, Prop, Val ) :-
      member( Prop = Val, Object ).
 
@@ -33,7 +32,7 @@ has_relational_formula(State, Rel_formula) :-
                ob_prop_val(State, relations, Rel_formulae),
                member(Rel_formula, Rel_formulae). 
 
-%% the following rule is used to analyse a formula
+%% The following rule is used to analyse a formula
 
 
 consume_formula( State, Formula, NewState ):-
