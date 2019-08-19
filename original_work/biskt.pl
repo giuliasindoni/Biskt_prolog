@@ -446,10 +446,14 @@ example(13, [],
 	    i:(ubox(udia(p1)) = t)).
 
 example(14, [], 
-	    i:(ubox(udia(p1)) = f)).
+	    i:(ubox(udia(p1)) = f) ).
 
-example(15, [],
-	      i:(udia(p1)=f)).
+example(15, [], 
+  i: (ubox(and(p1, p2)) = f) ).
+
+
+example(16, [], 
+  i: (udia(nneg(p1)) = t )).
 
 
 
@@ -476,7 +480,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(15).
 
 :-  initialization(run). 
 

@@ -43,7 +43,6 @@ consume_formula( State, Formula, NewState ):-
            set_ob_prop_val( State, available, Rest, NewState1 ),
            set_ob_prop_val( NewState1, used, [Formula | FU], NewState ).
 
-
 add_formula_to_available( State, Formula, NewState ) :-
             ob_prop_val( State, available, FA ),
             set_ob_prop_val( State, available, [Formula | FA], NewState ).
@@ -215,7 +214,6 @@ refute(State, [t_ubox | Rules]) :-
       applying(t_ubox),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
-
 /*
 refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
