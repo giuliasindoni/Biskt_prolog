@@ -48,7 +48,7 @@ refute( Formulae, [t_con | Rules] ) :-
         ),
         !,
         applying( t_con ),
-        refute( [S:(Phi=t), S:(Psi=t) | Formulae], Rules ).
+        refute( [S:(Phi=t), S:(Psi=t) | Rest], Rules ).
 
 %% False disjunction
 %% Remove false disjunctive formula and replace by its 
@@ -479,7 +479,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(15).
+run :- run(12).
 
 :-  initialization(run). 
 
