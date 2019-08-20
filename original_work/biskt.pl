@@ -201,8 +201,8 @@ refute( Formulae, [f_con, [f_con_B1 | Rules1], [f_com_B2 | Rules2] ] ) :-
         \+(member(S: (Psi =f), Rest)),
         !,
         applying(f_con),
-        refute( [S:(Phi=f) | Formulae], Rules1 ), 
-        refute( [S:(Psi=f) | Formulae], Rules2 ).
+        refute( [S:(Phi=f) | Rest], Rules1 ), 
+        refute( [S:(Psi=f) | Rest], Rules2 ).
 
 %% True implications
 %% We keep the implication in case it needs to be used again.
