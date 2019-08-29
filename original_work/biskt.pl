@@ -193,6 +193,8 @@ refute(Formulae, [r_stable | Rules]) :-
 %% True disjunction
 refute( Formulae, [t_dis, [t_dis_B1 | Rules1], [d_dis_B2 | Rules2] ] ) :-
         select( S:(or(Phi,Psi)=t), Formulae, Rest ), 
+         \+(member(S:(Phi = t), Rest)),
+        \+(member(S: (Psi =t), Rest)),
         !,
         applying(t_dis),
         refute( [S:(Phi=t) | Rest], Rules1 ), 
@@ -469,6 +471,9 @@ example(18, [],
 example(19, [],
         i: (udia(or(p1, p2)) =t)).
 
+example(20, [],
+        i: (ubox(or(p1, p2)) =f)).
+
 
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
@@ -493,7 +498,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(19).
+run :- run(20).
 
 :-  initialization(run). 
 
