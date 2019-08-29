@@ -54,7 +54,12 @@ refute( Formulae, [t_con | Rules] ) :-
 %% Remove false disjunctive formula and replace by its 
 %% separate false disjuncts (at same world)
 refute( Formulae, [f_dis | Rules] ) :-
-        select( S:(or(Phi,Psi)=f), Formulae, Rest ), !,
+        select( S:(or(Phi,Psi)=f), Formulae, Rest ),
+        (\+(member(S:(Phi = f), Rest))
+          ;
+          \+(member(S: (Psi =f), Rest))
+        ),
+        !,
         applying(f_dis),
         refute( [S:(Phi=f), S:(Psi=f) | Rest], Rules ).
 
@@ -461,6 +466,9 @@ example(17, [],
 example(18, [],
          i: (eneg(p1)=t)).
 
+example(19, [],
+        i: (udia(or(p1, p2)) =t)).
+
 
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
@@ -485,7 +493,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(18).
+run :- run(19).
 
 :-  initialization(run). 
 
