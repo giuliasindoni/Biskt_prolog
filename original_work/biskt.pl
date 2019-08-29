@@ -454,6 +454,12 @@ example(15, [],
 example(16, [], 
   i: (udia(nneg(p1)) = t )).
 
+example(17, [],
+         i: (nneg(p1)=f)).
+
+
+example(18, [],
+         i: (eneg(p1)=t)).
 
 
 prove( EgN, Rules ) :-
@@ -479,7 +485,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(18).
 
 :-  initialization(run). 
 
