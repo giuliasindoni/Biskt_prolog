@@ -93,7 +93,7 @@ refute(State, [false_is_true]) :-
 
 %% -----------------NON-BRANCHING RULES and NON-CREATING ----------------------
 
-%% Conjuction true
+%% Conjuction true 
 %% Use add_if_new to block the application of the rule if both 
 %% the conclusions are in available formula or in used formula  
 
@@ -107,6 +107,8 @@ refute( State, [t_con | Rules] ):-
       refute( Newstate3, Rules ).
 
 %% Disjunction false
+%% Use add_if_new to block the application of the rule if both 
+%% the conclusions are in available formula or in used formula 
 
 refute(State, [f_disj | Rules]) :-
       consume_formula(State, S: (or(Phi, Psi) = f), NewState1),
