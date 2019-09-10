@@ -110,8 +110,8 @@ refute( State, [t_con | Rules] ):-
 
 refute(State, [f_disj | Rules]) :-
       consume_formula(State, S: (or(Phi, Psi) = f), NewState1),
-      add_formula_to_available(NewState1, S:(Phi = f), NewState2),
-      add_formula_to_available(NewState2, S:(Psi = f), Newstate3),
+      add_formula_if_new(NewState1, S:(Phi = f), NewState2),
+      add_formula_if_new(NewState2, S:(Psi = f), Newstate3),
       applying(f_disj),
       print(newstate(Newstate3)),
       refute(Newstate3, Rules). 
