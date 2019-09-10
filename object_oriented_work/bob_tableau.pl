@@ -94,17 +94,13 @@ refute(State, [false_is_true]) :-
 %% -----------------NON-BRANCHING RULES and NON-CREATING ----------------------
 
 %% Conjuction true
-%% Block the application of the rule if both 
-%% the conclusion are in available formula (need also to check whether they are in used)
-%% it still applies t_ubox one more time non-needed, so we need to stop that
+%% Use add_if_new to block the application of the rule if both 
+%% the conclusions are in available formula or in used formula  
 
 refute( State, [t_con | Rules] ):-
-      consume_formula( State, S:(and(Phi,Psi)=t), NewState1 ),
-     %% ((\+ (has_available_formula(State,  S:(Phi=t))) )
-     %%  ;
-     %%  (\+ (has_available_formula(State, S:(Psi = t))) )),
-      add_formula_to_available( NewState1, S:(Phi=t), NewState2 ),
-      add_formula_to_available( NewState2, S:(Psi=t), Newstate3 ),
+     consume_formula( State, S:(and(Phi,Psi)=t), NewState1 ),
+      add_formula_if_new( NewState1, S:(Phi=t), NewState2 ),
+      add_formula_if_new( NewState2, S:(Psi=t), Newstate3 ),
       !,
       applying(t_con),
       print(newstate(Newstate3)),
