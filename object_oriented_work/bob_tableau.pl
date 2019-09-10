@@ -40,16 +40,18 @@ consume_formula( State, Formula, NewState ):-
            ob_prop_val( State, used, FU ),
            select( Formula, FA, Rest ),
            set_ob_prop_val( State, available, Rest, NewState1 ),
-           set_ob_prop_val( NewState1, used, [Formula | FU], NewState ).
+          set_ob_prop_val( NewState1, used, [Formula | FU], NewState ).
 
+
+/* 
 add_formula_to_available( State, Formula, NewState ) :-
             ob_prop_val( State, available, FA ),
             set_ob_prop_val( State, available, [Formula | FA], NewState ).
 
 
+*/
 
 
-/*
 
 add_formula_to_available( State, Formula, NewState ) :-
             ob_prop_val( State, available, Available ),
@@ -67,7 +69,7 @@ add_formula_if_new(State, Formula, NewState ) :-
               add_formula_to_available( State, Formula, NewState )
             ), !.
 
-*/
+
 
 
 add_rel_formula_to_relations(State, Rel_formula, NewState) :-
@@ -202,7 +204,7 @@ refute(State, [f_bdia | Rules]) :-
       refute(NewState1, Rules).
 
 %% Universal Box true
-
+/*
 refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
       has_available_formula( State, T: (_)),
@@ -213,7 +215,7 @@ refute(State, [t_ubox | Rules]) :-
       applying(t_ubox),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
-/*
+*/
 refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
       has_available_formula( State, T: (_)),
@@ -224,17 +226,6 @@ refute(State, [t_ubox | Rules]) :-
       print(newstate(NewState1)),
       refute(NewState1, Rules).
 
-
-refute(State, [t_ubox | Rules]) :-
-      has_available_formula(State, _S:(ubox(Phi) = t)),
-      has_available_formula( State, T: (_)),
-      add_formula_to_available(State, T:(Phi = t), NewState1),
-      (\+(add_formula_if_new(State, T:(Phi = t), State))),
-      !,
-      applying(t_ubox),
-      print(newstate(NewState1)),
-      refute(NewState1, Rules).
-*/
 
 
 %% Universal Diamond false
