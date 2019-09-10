@@ -221,7 +221,6 @@ refute(State, [t_ubox | Rules]) :-
       has_available_formula( State, T: (_)),
       add_formula_if_new(State, T:(Phi = t), NewState1),
       \+(State = NewState1),
-     %(\+(add_formula_if_new(State, T:(Phi = t), State))),
       !,
       applying(t_ubox),
       print(newstate(NewState1)),
@@ -234,9 +233,8 @@ refute(State, [t_ubox | Rules]) :-
 refute(State, [f_udia | Rules]) :-
       has_available_formula(State, _S:(udia(Phi) = f)),
       has_available_formula( State, T: (_)),
-      (\+(has_available_formula(State, T: (Phi = f)))),
-     (\+(has_used_formula(State, T: (Phi = t)))),
-      add_formula_to_available(State, T:(Phi = f), NewState1),
+      add_formula_if_new(State, T:(Phi = f), NewState1),
+      \+(State = NewState1),
       !,
       applying(f_udia),
       print(newstate(NewState1)),
@@ -270,6 +268,8 @@ test_object5( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], rela
 test_object6( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [r(i,i)] ] ).
 
 test_object7( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
+
+test_object8( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
 
 
