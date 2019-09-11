@@ -346,6 +346,7 @@ refute(Formulae, [f_ubox | Rules]) :-
 
 refute(Formulae, [t_udia | Rules]) :- 
       select(S:(udia(Phi) = t), Formulae, Rest),
+      \+(member(X:(Phi = t), Rest)),
        !,
        applying(t_udia),
        T = @(udia(Phi), S),
@@ -533,7 +534,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(14).
 
 :-  initialization(run). 
 
