@@ -266,6 +266,15 @@ refute(Formulae, [u_blocking | Rules]) :-
        refute(['B1', (S = T) | Formulae], Rules),
        refute(['B2', (S \= T) | Formulae], Rules).
 
+
+
+
+
+ %% WORLDS-CONTRACTION RULE (BLOCKING)
+  
+
+refute(Contracted_Formulae, Rules) :-
+                     delete_label_prime(Lab1, Lab2, Formulae, Contracted_Formulae).
  */
 
 %% CREATING RULES ------------------------------------
@@ -378,6 +387,26 @@ add_labels_h_reflexivity( [S:F | Rest], [S:F, h(S,S) | AddRefRest] ) :-
 add_labels_h_reflexivity( [S:F | Rest], [S:F | AddRefRest] ) :- 
          !,
          add_labels_h_reflexivity( Rest, AddRefRest ). 
+
+/*
+different_formulae(Lab1, Lab2, List) :- 
+                                      member(Lab1:(F1= S1), List),
+                                      \+(member(Lab2:(F1 = S1), List)).
+
+lab1_in_lab2(Lab1, Lab2, List) :- \+(different_formulae(Lab1, Lab2, List)), \+(Lab1 = Lab2).
+
+
+subset_with_label( Sub, Label, Set ) :- setof( X, 
+                                            P^(member(X, Set), X= Label:P ), 
+                                            Sub  
+                                           ).
+
+
+delete_label_prime(Lab1, Lab2, InitialList, FinalList) :- lab1_in_lab2(Lab2, Lab1, InitialList),
+                                                          subset_with_label(ListLab2, Lab2, InitialList),
+                                                          subtract(InitialList, ListLab2, FinalList).
+
+*/
 
 
 
@@ -501,7 +530,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(11).
+run :- run(12).
 
 :-  initialization(run). 
 
