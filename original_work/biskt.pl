@@ -284,6 +284,7 @@ refute(Formulae, [contr_rule | Rules]) :-
 %% False node first negation
 refute( Formulae, [f_nneg | Rules] ) :-
         select( S:(nneg(Phi)=f), Formulae, Rest ),
+        \+( (member(h(S, X), Rest)), (member(X:(Phi = t), Rest))),
         !,
         applying( f_nneg ),
         T = @(nneg(Phi),S),
@@ -346,7 +347,7 @@ refute(Formulae, [f_ubox | Rules]) :-
 
 refute(Formulae, [t_udia | Rules]) :- 
       select(S:(udia(Phi) = t), Formulae, Rest),
-      \+(member(X:(Phi = t), Rest)),
+      \+(member(_X:(Phi = t), Rest)),
        !,
        applying(t_udia),
        T = @(udia(Phi), S),
