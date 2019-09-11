@@ -329,6 +329,8 @@ refute(Formulae, [f_whitebox | Rules]) :-
 
 refute(Formulae, [t_blackdia | Rules]) :-
       select(S: (blackdia(Phi) = t), Formulae, Rest),
+      ( \+(member(r(X, S), Rest))  ;
+        \+( member(X:(Phi =t), Rest))),
       !,
       applying(t_blackdia),
       T = @(blackdia(Phi),S),
@@ -502,9 +504,6 @@ example(16, [],
   i: (udia(nneg(p1)) = t )).
 
 
-example(21, [], 
-  i: (ubox(eneg(p1)) = f )).
-
 example(17, [],
          i: (nneg(p1)=f)).
 
@@ -517,6 +516,14 @@ example(19, [],
 
 example(20, [],
         i: (ubox(or(p1, p2)) =f)).
+
+
+example(21, [], 
+  i: (ubox(eneg(p1)) = f )).
+
+
+example(22, [], 
+  i: (ubox(blackdia(p1)) = f )).
 
 
 prove( EgN, Rules ) :-
@@ -542,7 +549,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(21).
+run :- run(22).
 
 :-  initialization(run). 
 
