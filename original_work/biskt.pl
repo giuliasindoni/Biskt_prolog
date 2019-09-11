@@ -271,11 +271,13 @@ refute(Formulae, [u_blocking | Rules]) :-
 
 
  %% WORLDS-CONTRACTION RULE (BLOCKING)
-  
 
-refute(Contracted_Formulae, Rules) :-
-                     delete_label_prime(Lab1, Lab2, Formulae, Contracted_Formulae).
- */
+
+
+refute(Formulae, [contr_rule | Rules]) :-
+       delete_label_prime(_S, _T, Formulae, Contr_formulae),
+       refute(Contr_formulae, Rules).
+*/
 
 %% CREATING RULES ------------------------------------
 
@@ -338,6 +340,7 @@ refute(Formulae, [f_ubox | Rules]) :-
        refute([T: (Phi = f), h(T,T) | Rest], Rules).
 
 
+
 %% True universal diamond 
 %% destructive version
 
@@ -388,7 +391,7 @@ add_labels_h_reflexivity( [S:F | Rest], [S:F | AddRefRest] ) :-
          !,
          add_labels_h_reflexivity( Rest, AddRefRest ). 
 
-/*
+
 different_formulae(Lab1, Lab2, List) :- 
                                       member(Lab1:(F1= S1), List),
                                       \+(member(Lab2:(F1 = S1), List)).
@@ -406,7 +409,7 @@ delete_label_prime(Lab1, Lab2, InitialList, FinalList) :- lab1_in_lab2(Lab2, Lab
                                                           subset_with_label(ListLab2, Lab2, InitialList),
                                                           subtract(InitialList, ListLab2, FinalList).
 
-*/
+
 
 
 
