@@ -284,7 +284,8 @@ refute(Formulae, [contr_rule | Rules]) :-
 %% False node first negation
 refute( Formulae, [f_nneg | Rules] ) :-
         select( S:(nneg(Phi)=f), Formulae, Rest ),
-        \+( (member(h(S, X), Rest)), (member(X:(Phi = t), Rest))),
+        ( \+(member(h(S, X), Rest))  ;
+          \+( member(X:(Phi =t), Rest))),
         !,
         applying( f_nneg ),
         T = @(nneg(Phi),S),
@@ -535,7 +536,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(14).
+run :- run(16).
 
 :-  initialization(run). 
 
