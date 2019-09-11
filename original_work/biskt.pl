@@ -294,6 +294,8 @@ refute( Formulae, [f_nneg | Rules] ) :-
 %% True edge first negation
 refute( Formulae, [t_eneg | Rules] ) :-
         select( S:(eneg(Phi)=t), Formulae, Rest ),
+         ( \+(member(h(X, S), Rest))  ;
+          \+( member(X:(Phi =f), Rest))),
         !,
         applying( t_eneg ),
         T = @(eneg(Phi),S),
@@ -499,6 +501,10 @@ example(15, [],
 example(16, [], 
   i: (udia(nneg(p1)) = t )).
 
+
+example(21, [], 
+  i: (ubox(eneg(p1)) = f )).
+
 example(17, [],
          i: (nneg(p1)=f)).
 
@@ -536,7 +542,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(16).
+run :- run(21).
 
 :-  initialization(run). 
 
