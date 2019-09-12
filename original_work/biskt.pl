@@ -304,6 +304,9 @@ refute( Formulae, [t_eneg | Rules] ) :-
 %% False implication
  refute( Formulae, [f_imp | Rules] ) :-
         select( W:(imp(Phi,Psi)=f), Formulae, Rest ),
+        ( \+(member(h(W, X), Rest))  ;
+          \+( member(X:(Phi =t), Rest)) ;
+          \+(member(X:(Psi= f)))),
         !,
         applying( f_imp ),
         W1 = @(imp(Phi,Psi),W),
@@ -340,6 +343,7 @@ refute(Formulae, [t_blackdia | Rules]) :-
 
 refute(Formulae, [f_ubox | Rules]) :-
        select(S: (ubox(Phi) = f), Formulae, Rest),
+       \+(member(_X:(Phi = f), Rest)),
        !,
        applying(f_ubox),
        T = @(ubox(Phi),S),
@@ -525,6 +529,12 @@ example(21, [],
 example(22, [], 
   i: (ubox(blackdia(p1)) = f )).
 
+example(23, [], 
+  i: (udia(imp(p1, p2)) = t )).
+
+example(24, [], 
+      i:(udia(ubox(p1)) = t) ).
+
 
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
@@ -549,7 +559,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(22).
+run :- run(24).
 
 :-  initialization(run). 
 
