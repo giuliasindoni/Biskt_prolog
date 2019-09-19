@@ -312,21 +312,37 @@ refute( Formulae, [t_eneg | Rules] ) :-
         W1 = @(imp(Phi,Psi),W),
         refute( [h(W,W1), h(W1,W1), W1:(Phi=t), W1:(Psi=f) | Rest], Rules ). 
 
-
+/*
 
 %% False white box
-%% do we need to keep the formula 
-%% S: (whitebox(Phi) = f in the branch? If so 
-%% we will need to refute [_ | Formulae]
-%% instead of [_ | Rest]
-%% in the last, recursive line
+
 
 refute(Formulae, [f_whitebox | Rules]) :-
         select(S: (whitebox(Phi) = f), Formulae, Rest),
+        ( \+(member(r(S, X), Rest))  ;
+        \+( member(X:(Phi = f), Rest))),
         !,
         applying(f_whitebox),
         T =  @(whitebox(Phi),S),
         refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules). 
+*/
+
+
+
+%% False white box, branching version
+
+refute(Formulae, [f_whitebox, [f_whitebox_B1 | Rules1], [f_whitebox_B2 | Rules2]]) :-
+        select(S: (whitebox(Phi) = f), Formulae, Rest),
+        ( \+(member(r(S, X), Rest))  ;
+        \+( member(X:(Phi = f), Rest))),
+        !,
+        applying(f_whitebox),
+        T =  @(whitebox(Phi),S),
+        refute([r(S, S), S:(Phi = f) | Rest ], Rules1),
+        refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules2). 
+
+
+
 /*
 %% True black dia
 
@@ -552,6 +568,11 @@ example(24, [],
       i:(udia(ubox(p1)) = t) ).
 
 
+
+example(25, [], 
+  i: (udia(whitebox(p1)) = t )).
+
+
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
        write(proving(EgN)),
@@ -575,7 +596,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(22).
+run :- run(25).
 
 :-  initialization(run). 
 
