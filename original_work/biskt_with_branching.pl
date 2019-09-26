@@ -22,25 +22,6 @@ refute( Formulae, [false_is_t_close] ) :-
       member( _:(false=t), Formulae ), !,
       applying( false_is_t_close ).
 
-/*
-refute( Formulae, [r_irreflexive] ) :-
-   member(r(S, S), Formulae), !,
-   applying( r_irreflexive).
-
-*/
-
-%% TEST WITH PROPERTY NOT EQUALITY
-%% TO GO WITH H-SUCCESOR BLOCKING
-/*
-refute(Formulae, [not_equal]) :-
-       member( not_id(S, S), Formulae), !,
-       applying(not_equal).
-
-refute(Formulae, [not_equal]) :-
-    member( S \= S, Formulae), !,
-    applying(not_equal).
-*/
-
 
 
 %% NON-BRANCHING RULES
@@ -223,7 +204,6 @@ refute( Formulae, [f_con, [f_con_B1 | Rules1], [f_com_B2 | Rules2] ] ) :-
 %% We keep the implication in case it needs to be used again.
 %% But the rule is blocked if either of the alternative new formulae
 %% is already present in the branch.
-%% do not we need the special case for S =T as well?
 refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
         select( W:(imp(Phi,Psi)=t), Formulae, Rest ),
         member( h(W,W2), Rest ),
@@ -236,57 +216,7 @@ refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
 
 
 
-
-%% TEST WITH H-SUCCESOR BLOCKING RULE ----------------------------------
-/*
- refute(Formulae, [h_blocking | Rules]) :-
-       member(h(S, T), Formulae),
-       \+(member( id(S, T), Formulae)),
-       \+(member( not_id(S, T), Formulae)),
-        !,
-        applying(h_blocking),
-       refute(['B1', id(S, T) | Formulae], Rules),
-       refute(['B2', not_id(S, T) | Formulae], Rules).
-
-
-%% TEST WITH MODIFIED VERSION FOR H-SUCCESOR BLOCKING
-refute(Formulae, [h_blocking | Rules]) :-
-      member(h(S, T), Formulae),
-       \+(member( (S = T), Formulae)),
-       \+(member( (S \= T), Formulae)),
-       !,
-       applying(h_blocking),
-       refute(['B1', (S = T) | Formulae], Rules),
-       refute(['B2', (S \= T) | Formulae], Rules).
-
-
-
-%% TEST WITH UNIVERSAL BLOCKING RULE
-
-refute(Formulae, [u_blocking | Rules]) :-
-       member( S : (_) , Formulae),
-       member( T: (_), Formulae), 
-       \+(member( (S = T), Formulae )),
-      \+(member(( S \= T ), Formulae)),
-       !,
-       applying(u_blocking),
-       refute(['B1', (S = T) | Formulae], Rules),
-       refute(['B2', (S \= T) | Formulae], Rules).
-
-
-
-
-
- %% WORLDS-CONTRACTION RULE (BLOCKING)
-
-
-
-refute(Formulae, [contr_rule | Rules]) :-
-       delete_label_prime(_S, _T, Formulae, Contr_formulae),
-       refute(Contr_formulae, Rules).
-*/
-
-%% CREATING RULES ------------------------------------
+%% CREATING RULES --------------  EXTENDED BRANCHING VERSION ----------------------
 
 %% False node first negation
 
@@ -328,63 +258,19 @@ refute(Formulae, [f_imp, [f_imp_B1 | Rules1], [f_imp_B2 | Rules2]]) :-
         refute([h(W, W1), h(W1,W1), W1: (Phi = t), W1:(Psi=f)   | Rest], Rules2).
 
 
-/*
-
 %% False white box
-
-
-refute(Formulae, [f_whitebox | Rules]) :-
-        select(S: (whitebox(Phi) = f), Formulae, Rest),
-        ( \+(member(r(S, X), Rest))  ;
-        \+( member(X:(Phi = f), Rest))),
-        !,
-        applying(f_whitebox),
-        T =  @(whitebox(Phi),S),
-        refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules). 
-*/
-
-
-
-%% False white box, branching version
 
 refute(Formulae, [f_whitebox, [f_whitebox_B1 | Rules1], [f_whitebox_B2 | Rules2]]) :-
         select(S: (whitebox(Phi) = f), Formulae, Rest),
+        member(Y:(_), Formulae),
         ( \+(member(r(S, X), Rest))  ;
         \+( member(X:(Phi = f), Rest))),
         !,
         applying(f_whitebox),
         T =  @(whitebox(Phi),S),
-        refute([r(S, S), S:(Phi = f) | Rest ], Rules1),
+        refute([r(S, Y), Y:(Phi = f) | Rest ], Rules1),
         refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules2). 
 
-
-
-/*
-%% True black dia
-
-refute(Formulae, [t_blackdia | Rules]) :-
-      select(S: (blackdia(Phi) = t), Formulae, Rest),
-      ( \+(member(r(X, S), Rest))  ;
-        \+( member(X:(Phi =t), Rest))),
-      !,
-      applying(t_blackdia),
-      T = @(blackdia(Phi),S),
-      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules).
-
-
-%% True black dia, branching version
-
-refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
-      select(S: (blackdia(Phi) = t), Formulae, Rest),
-      ( \+(member(r(X, S), Rest))  ;
-        \+( member(X:(Phi =t), Rest))),
-      !,
-      applying(t_blackdia),
-      T = @(blackdia(Phi),S),
-      refute([r(S, S), S:(Phi = t) | Rest], Rules1),
-      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
-
-*/
 
 
 %% True black dia, second branching version
@@ -404,14 +290,15 @@ refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]
 
 %% False universal box
 
-refute(Formulae, [f_ubox | Rules]) :-
+refute(Formulae, [f_ubox, [f_ubox_B1 | Rules1], [f_ubox_B2 | Rules2]]) :-
        select(S: (ubox(Phi) = f), Formulae, Rest),
+       member(Y:(_), Formulae),
        \+(member(_X:(Phi = f), Rest)),
        !,
        applying(f_ubox),
        T = @(ubox(Phi),S),
-       refute([T: (Phi = f), h(T,T) | Rest], Rules).
-
+       refute([Y:(Phi = t) | Rest], Rules1),
+       refute([h(T,T), T: (Phi = f) | Rest], Rules2).
 
 
 %% True universal diamond 
@@ -632,7 +519,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(23).
+run :- run(25).
 
 :-  initialization(run). 
 
