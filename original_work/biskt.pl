@@ -22,6 +22,11 @@ refute( Formulae, [false_is_t_close] ) :-
       member( _:(false=t), Formulae ), !,
       applying( false_is_t_close ).
 
+
+refute( Formulae, [r_irreflexive] ) :-
+   member(r(S, S), Formulae), !,
+   applying( r_irreflexive).
+
 %% TEST WITH PROPERTY NOT EQUALITY
 %% TO GO WITH H-SUCCESOR BLOCKING
 /*
@@ -355,7 +360,6 @@ refute(Formulae, [t_blackdia | Rules]) :-
       T = @(blackdia(Phi),S),
       refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules).
 
-*/
 
 %% True black dia, branching version
 
@@ -367,6 +371,22 @@ refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]
       applying(t_blackdia),
       T = @(blackdia(Phi),S),
       refute([r(S, S), S:(Phi = t) | Rest], Rules1),
+      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
+
+*/
+
+
+%% True black dia, second branching version
+
+refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
+      select(S: (blackdia(Phi) = t), Formulae, Rest),
+      member(Y:(_), Formulae),
+      ( \+(member(r(X, S), Rest))  ;
+        \+( member(X:(Phi =t), Rest))),
+      !,
+      applying(t_blackdia),
+      T = @(blackdia(Phi),S),
+      refute([r(Y, S), Y:(Phi = t) | Rest], Rules1),
       refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
 
 
@@ -573,6 +593,7 @@ example(25, [],
   i: (udia(whitebox(p1)) = t )).
 
 
+
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
        write(proving(EgN)),
@@ -596,7 +617,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(25).
+run :- run(22).
 
 :-  initialization(run). 
 
