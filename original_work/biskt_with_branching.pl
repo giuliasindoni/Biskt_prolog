@@ -297,7 +297,7 @@ refute(Formulae, [f_ubox, [f_ubox_B1 | Rules1], [f_ubox_B2 | Rules2]]) :-
        !,
        applying(f_ubox),
        T = @(ubox(Phi),S),
-       refute([Y:(Phi = t) | Rest], Rules1),
+       refute([Y:(Phi = f) | Rest], Rules1),
        refute([h(T,T), T: (Phi = f) | Rest], Rules2).
 
 
@@ -519,7 +519,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(25).
+run :- run(12).
 
 :-  initialization(run). 
 
