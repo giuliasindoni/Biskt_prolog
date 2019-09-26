@@ -22,10 +22,12 @@ refute( Formulae, [false_is_t_close] ) :-
       member( _:(false=t), Formulae ), !,
       applying( false_is_t_close ).
 
-
+/*
 refute( Formulae, [r_irreflexive] ) :-
    member(r(S, S), Formulae), !,
    applying( r_irreflexive).
+
+*/
 
 %% TEST WITH PROPERTY NOT EQUALITY
 %% TO GO WITH H-SUCCESOR BLOCKING
@@ -582,7 +584,7 @@ example(22, [],
   i: (ubox(blackdia(p1)) = f )).
 
 example(23, [], 
-  i: (udia(imp(p1, p2)) = t )).
+  i: (udia(imp(and(p1,p2), p2)) = t )).
 
 example(24, [], 
       i:(udia(ubox(p1)) = t) ).
@@ -591,6 +593,11 @@ example(24, [],
 
 example(25, [], 
   i: (udia(whitebox(p1)) = t )).
+
+
+example(26, [], 
+  i: ( udia(imp(p1,p2)) = t )).
+        
 
 
 
@@ -617,7 +624,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(22).
+run :- run(26).
 
 :-  initialization(run). 
 
