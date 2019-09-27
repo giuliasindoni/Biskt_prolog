@@ -245,7 +245,7 @@ refute(Formulae, [f_imp, [f_imp_B1 | Rules1], [f_imp_B2 | Rules2]]) :-
          member(Y:(_), Formulae),
         ( \+(member(h(W, X), Rest))  ;
           \+( member(X:(Phi =t), Rest)) ;
-          \+(member(X:(Psi= f)))),
+          \+(member(X:(Psi= f), Rest))),
         !,
         applying( f_imp ),
         W1 = @(imp(Phi,Psi),W),
@@ -497,11 +497,9 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(11).
 
 :-  initialization(run). 
-
-
 
 
 
