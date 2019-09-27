@@ -97,8 +97,6 @@ refute( Formulae, [f_eneg_s | Rules] ) :-
         applying(f_eneg_s),
         refute( [S:(Phi=t) | Formulae], Rules ).
 
-%%is it ok to use cut? 
-%%will this stop to find all the worlds that are R-successor of the world where box formula is?
 
 %% True white box 
 refute(Formulae, [t_whitebox | Rules]) :-
@@ -106,7 +104,6 @@ refute(Formulae, [t_whitebox | Rules]) :-
        member(r(S, T), Rest),
        \+(member( T: (Phi = t), Rest)), !, %% Check not already present
        applying(t_whitebox ),
-       %% append( Rest, [S: (whitebox(Phi) = t)], RearrangedFormulae ), % moved the active formula to end 
        refute([T: (Phi = t) | Formulae ], Rules). 
 
 
@@ -119,8 +116,6 @@ refute(Formulae, [f_blackdia | Rules]) :-
       refute([T: (Phi = f) | Formulae], Rules).
 
 %% True everywhere
-%% Is it ok to put the cut?
-%% will this stop us in finding all the worlds in the node? 
 
 refute(Formulae, [t_ubox| Rules]) :-
       select( _S: (ubox(Phi) = t),  Formulae, Rest),
@@ -302,7 +297,6 @@ refute(Formulae, [f_ubox, [f_ubox_B1 | Rules1], [f_ubox_B2 | Rules2]]) :-
 
 
 %% True universal diamond 
-%% destructive version
 
 
 refute(Formulae, [t_udia, [t_udia_B1 | Rules1], [t_udia_B2 | Rules2]]) :-
@@ -316,22 +310,6 @@ refute(Formulae, [t_udia, [t_udia_B1 | Rules1], [t_udia_B2 | Rules2]]) :-
       refute([h(T,T), T: (Phi = t) | Rest], Rules2).
 
 
-
-/*
-%% True universal diamond variant1
-%% this is the NON-destructive version of the rule
-%% still not finished, example14 does not seem right
-
-
-refute(Formulae, [t_udia | Rules]) :-
-       select(S: (udia(Phi) = t), Formulae, Rest),
-       T = (@(udia(Phi)), S),
-       \+( member( T: (Phi=t), Rest ) ),
-       !,
-      applying(t_udia),
-       T = @(udia(Phi), S),
-       refute([T: (Phi = t), h(T, T) | Formulae], Rules).
- */
 
 
 %% -------------------------------------
