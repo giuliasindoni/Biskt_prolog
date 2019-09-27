@@ -219,7 +219,7 @@ refute(Formulae, [contr_rule | Rules]) :-
        refute(Contr_formulae, Rules).
 */
 
-%% CREATING RULES ------------------------------------
+%% CREATING RULES ORIGINAL NON-BRANCHING VERSION ------------------------------------
 
 %% False node first negation
 refute( Formulae, [f_nneg | Rules] ) :-
@@ -252,7 +252,7 @@ refute( Formulae, [t_eneg | Rules] ) :-
         W1 = @(imp(Phi,Psi),W),
         refute( [h(W,W1), h(W1,W1), W1:(Phi=t), W1:(Psi=f) | Rest], Rules ). 
 
-/*
+
 
 %% False white box
 
@@ -265,9 +265,9 @@ refute(Formulae, [f_whitebox | Rules]) :-
         applying(f_whitebox),
         T =  @(whitebox(Phi),S),
         refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules). 
-*/
 
 
+/*
 
 %% False white box, branching version
 
@@ -282,8 +282,23 @@ refute(Formulae, [f_whitebox, [f_whitebox_B1 | Rules1], [f_whitebox_B2 | Rules2]
         refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules2). 
 
 
+%% False white box, second branching version
 
-/*
+refute(Formulae, [f_whitebox, [f_whitebox_B1 | Rules1], [f_whitebox_B2 | Rules2]]) :-
+      select(S: (whitebox(Phi) = f), Formulae, Rest),
+      member(Y:(_), Formulae),
+      ( \+(member(r(S, X), Rest))  ;
+        \+( member(X:(Phi =f), Rest))),
+      !,
+      applying(f_whitebox),
+      T = @(whitebox(Phi),S),
+      refute([r(S, Y), Y:(Phi = f) | Rest], Rules1),
+      refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules2).
+
+*/
+
+
+
 %% True black dia
 
 refute(Formulae, [t_blackdia | Rules]) :-
@@ -294,7 +309,7 @@ refute(Formulae, [t_blackdia | Rules]) :-
       applying(t_blackdia),
       T = @(blackdia(Phi),S),
       refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules).
-
+/*
 
 %% True black dia, branching version
 
@@ -308,7 +323,7 @@ refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]
       refute([r(S, S), S:(Phi = t) | Rest], Rules1),
       refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
 
-*/
+
 
 
 %% True black dia, second branching version
@@ -324,7 +339,7 @@ refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]
       refute([r(Y, S), Y:(Phi = t) | Rest], Rules1),
       refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
 
-
+*/
 
 %% False universal box
 
@@ -516,7 +531,8 @@ example(25, [],
 example(26, [], 
   i: (udia(imp(p1, p2)) = t )).
         
-
+example(27, [], 
+  i: (udia(whitebox(p1)) = t )).
 
 
 prove( EgN, Rules ) :-
