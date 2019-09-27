@@ -22,26 +22,6 @@ refute( Formulae, [false_is_t_close] ) :-
       member( _:(false=t), Formulae ), !,
       applying( false_is_t_close ).
 
-/*
-refute( Formulae, [r_irreflexive] ) :-
-   member(r(S, S), Formulae), !,
-   applying( r_irreflexive).
-
-*/
-
-%% TEST WITH PROPERTY NOT EQUALITY
-%% TO GO WITH H-SUCCESOR BLOCKING
-/*
-refute(Formulae, [not_equal]) :-
-       member( not_id(S, S), Formulae), !,
-       applying(not_equal).
-
-refute(Formulae, [not_equal]) :-
-    member( S \= S, Formulae), !,
-    applying(not_equal).
-*/
-
-
 
 %% NON-BRANCHING RULES
 
@@ -116,8 +96,6 @@ refute( Formulae, [f_eneg_s | Rules] ) :-
         applying(f_eneg_s),
         refute( [S:(Phi=t) | Formulae], Rules ).
 
-%%is it ok to use cut? 
-%%will this stop to find all the worlds that are R-successor of the world where box formula is?
 
 %% True white box 
 refute(Formulae, [t_whitebox | Rules]) :-
@@ -125,7 +103,6 @@ refute(Formulae, [t_whitebox | Rules]) :-
        member(r(S, T), Rest),
        \+(member( T: (Phi = t), Rest)), !, %% Check not already present
        applying(t_whitebox ),
-       %% append( Rest, [S: (whitebox(Phi) = t)], RearrangedFormulae ), % moved the active formula to end 
        refute([T: (Phi = t) | Formulae ], Rules). 
 
 
@@ -138,8 +115,6 @@ refute(Formulae, [f_blackdia | Rules]) :-
       refute([T: (Phi = f) | Formulae], Rules).
 
 %% True everywhere
-%% Is it ok to put the cut?
-%% will this stop us in finding all the worlds in the node? 
 
 refute(Formulae, [t_ubox| Rules]) :-
       select( _S: (ubox(Phi) = t),  Formulae, Rest),
@@ -223,7 +198,6 @@ refute( Formulae, [f_con, [f_con_B1 | Rules1], [f_com_B2 | Rules2] ] ) :-
 %% We keep the implication in case it needs to be used again.
 %% But the rule is blocked if either of the alternative new formulae
 %% is already present in the branch.
-%% do not we need the special case for S =T as well?
 refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
         select( W:(imp(Phi,Psi)=t), Formulae, Rest ),
         member( h(W,W2), Rest ),
@@ -234,48 +208,7 @@ refute( Formulae, [t_imp, [t_imp_B1 | Rules1], [t_imp_B2 | Rules2] ]  ) :-
         refute( ['B1', W2:(Phi=f) | Formulae], Rules1 ), 
         refute( ['B2', W2:(Psi=t) | Formulae], Rules2 ). 
 
-
-
-
-%% TEST WITH H-SUCCESOR BLOCKING RULE ----------------------------------
 /*
- refute(Formulae, [h_blocking | Rules]) :-
-       member(h(S, T), Formulae),
-       \+(member( id(S, T), Formulae)),
-       \+(member( not_id(S, T), Formulae)),
-        !,
-        applying(h_blocking),
-       refute(['B1', id(S, T) | Formulae], Rules),
-       refute(['B2', not_id(S, T) | Formulae], Rules).
-
-
-%% TEST WITH MODIFIED VERSION FOR H-SUCCESOR BLOCKING
-refute(Formulae, [h_blocking | Rules]) :-
-      member(h(S, T), Formulae),
-       \+(member( (S = T), Formulae)),
-       \+(member( (S \= T), Formulae)),
-       !,
-       applying(h_blocking),
-       refute(['B1', (S = T) | Formulae], Rules),
-       refute(['B2', (S \= T) | Formulae], Rules).
-
-
-
-%% TEST WITH UNIVERSAL BLOCKING RULE
-
-refute(Formulae, [u_blocking | Rules]) :-
-       member( S : (_) , Formulae),
-       member( T: (_), Formulae), 
-       \+(member( (S = T), Formulae )),
-      \+(member(( S \= T ), Formulae)),
-       !,
-       applying(u_blocking),
-       refute(['B1', (S = T) | Formulae], Rules),
-       refute(['B2', (S \= T) | Formulae], Rules).
-
-
-
-
 
  %% WORLDS-CONTRACTION RULE (BLOCKING)
 
@@ -406,7 +339,6 @@ refute(Formulae, [f_ubox | Rules]) :-
 
 
 %% True universal diamond 
-%% destructive version
 
 refute(Formulae, [t_udia | Rules]) :- 
       select(S:(udia(Phi) = t), Formulae, Rest),
@@ -416,22 +348,6 @@ refute(Formulae, [t_udia | Rules]) :-
        T = @(udia(Phi), S),
       refute([T: (Phi = t), h(T, T) | Rest], Rules).
 
-
-/*
-%% True universal diamond variant1
-%% this is the NON-destructive version of the rule
-%% still not finished, example14 does not seem right
-
-
-refute(Formulae, [t_udia | Rules]) :-
-       select(S: (udia(Phi) = t), Formulae, Rest),
-       T = (@(udia(Phi)), S),
-       \+( member( T: (Phi=t), Rest ) ),
-       !,
-      applying(t_udia),
-       T = @(udia(Phi), S),
-       refute([T: (Phi = t), h(T, T) | Formulae], Rules).
- */
 
 
 %% -------------------------------------
@@ -595,8 +511,10 @@ example(25, [],
   i: (udia(whitebox(p1)) = t )).
 
 
+
+
 example(26, [], 
-  i: ( udia(imp(p1,p2)) = t )).
+  i: (udia(imp(p1, p2)) = t )).
         
 
 
@@ -624,7 +542,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(26).
+run :- run(12).
 
 :-  initialization(run). 
 
