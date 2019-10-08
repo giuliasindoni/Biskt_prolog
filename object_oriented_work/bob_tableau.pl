@@ -16,17 +16,19 @@ set_ob_prop_val( Object, Prop, Val, NewObject ) :-
 
 %% IN-BETWEEN RULES
 
-%% The following rule specifies when a logic formula is available
+%% The following rule specifies when a logic formula is in available-list
 
 has_available_formula( State, Formula ) :-
           ob_prop_val( State, available, Formulae ),
           member( Formula, Formulae ).
 
+%% The following rule specifies when a logic formula is in used-list
+
 has_used_formula(State, Formula) :-
                  ob_prop_val(State, used, Formulae),
                  member(Formula, Formulae).
 
-%% The following rule specifies when a relational formula is available
+%% The following rule specifies when a relational formula is in relation-list
 
 has_relational_formula(State, Rel_formula) :-
                ob_prop_val(State, relations, Rel_formulae),
