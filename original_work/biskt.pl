@@ -558,7 +558,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(11).
+run :- run(12).
 
 :-  initialization(run). 
 
