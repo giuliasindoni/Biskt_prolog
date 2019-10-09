@@ -122,21 +122,6 @@ refute(State, [f_disj | Rules]) :-
 
 %% N-Negation true
 
-/*
-%% Destructive version,
-%% not good because we need to apply premise to all the 
-%% world that are in the relation given in the second premise
-
-refute(State, [t_nneg | Rules]) :- 
-      consume_formula(State, S: (nneg(Phi) = t), NewState1),
-      has_relational_formula(State, h(S, T)),
-      add_formula_to_available(NewState1, T: (Phi = f), NewState2),
-      applying(t_nneg),
-      print(newstate(NewState2)),
-      refute(NewState2, Rules). 
-*/
-
-
 
 %% Non-destructive version,
 %% it does the job of keeping the premise in available
