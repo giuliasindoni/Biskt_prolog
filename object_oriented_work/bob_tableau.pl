@@ -96,7 +96,7 @@ refute(State, [false_is_true]) :-
 %% -----------------NON-BRANCHING RULES and NON-CREATING ----------------------
 
 %% Conjuction true 
-%% Use add_if_new to block the application of the rule if both 
+%% Use add_formula_if_new to block the application of the rule if both 
 %% the conclusions are in available formula or in used formula  
 
 refute( State, [t_con | Rules] ):-
@@ -109,7 +109,7 @@ refute( State, [t_con | Rules] ):-
       refute( Newstate3, Rules ).
 
 %% Disjunction false
-%% Use add_if_new to block the application of the rule if both 
+%% Use add_formula_if_new to block the application of the rule if both 
 %% the conclusions are in available formula or in used formula 
 
 refute(State, [f_disj | Rules]) :-
@@ -120,24 +120,18 @@ refute(State, [f_disj | Rules]) :-
       print(newstate(Newstate3)),
       refute(Newstate3, Rules). 
 
-%% N-Negation true
+%% N-Negation true, Non-destructive rule
 
 
-%% Non-destructive version,
-%% it does the job of keeping the premise in available
-%% and adding the conclusion to each world (i and j) 
-%% that is in the right relation with i
-%% but it seems to do it twice for each world
 refute(State, [t_nneg | Rules]) :-
       has_available_formula(State, S:(nneg(Phi) = t )),
       has_relational_formula(State, h(S, T)),
-      %%\+( member( T:(Phi = f), available) ),
-      (\+(has_available_formula(State, T: (Phi = f)))),
-      add_formula_to_available(State, T:(Phi = f), NewState1),
+      add_formula_if_new(State, T:(Phi = f), NewState1),
+      \+(State = NewState1),
+      !,
       applying(t_nneg),
       print(newstate(NewState1)),
-      refute(NewState1, Rules).
-
+      refute(NewState1, Rules). 
 
 %% E-Negation false
 
@@ -255,6 +249,9 @@ test_object6( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], rel
 test_object7( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
 
 test_object8( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
+
+
+test_object9( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i,j)] ] ).
 
 
 
