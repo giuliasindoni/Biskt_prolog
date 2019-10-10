@@ -79,20 +79,6 @@ add_rel_formula_to_relations(State, Rel_formula, NewState) :-
                              set_ob_prop_val(State, relations, [Rel_formula | Rel_formulae], NewState). 
 
 
-/*
-
-%% ----------------- ADD H-REFLEXIVITY LABELS---------------------
-
-
-refute(State, Rules) :-
-       ob_prop_val(State, available, Available_formulae),
-       ob_prop_val(State, relations, Rel_formulae),
-       member(S:(_), Available_formulae),
-       \+(member(h(S, S), Rel_formulae)),
-       add_rel_formula_to_relations(State, h(S,S), State_with_H_reflexive),
-       refute(State_with_H_reflexive, Rules). 
-
-*/
 
 
 %% -----------------RULES FOR CONTRADICTION ---------------------
@@ -231,7 +217,7 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i,i) ] ] ).
+test_object3( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i, j) ] ] ).
 
 test_object4( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
@@ -247,10 +233,25 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 
 
+/*
+
+%% ----------------- ADD H-REFLEXIVITY LABELS---------------------
+
+
+add_H_reflexive(State, State_with_H_reflexive) :-
+       ob_prop_val(State, available, Available_formulae),
+       ob_prop_val(State, relations, Rel_formulae),
+       member(S:(_), Available_formulae),
+       \+(member(h(S, S), Rel_formulae)),
+       add_rel_formula_to_relations(State, h(S,S), State_with_H_reflexive).  
 
 
 
+prove(State, Rules) :- 
+      add_H_reflexive(State, State_with_H_reflexive),
+      refute(State_with_H_reflexive, Rules). 
 
+*/
 
 
 
