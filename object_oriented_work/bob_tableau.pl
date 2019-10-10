@@ -225,21 +225,23 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
+test_object3( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
+test_object4( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
-test_object4( [available = [i: (wbox(p1) = t), i:(bdia(p2) = f)], used=[], relations = [r(i, j), r(i,i)] ] ).
+test_object5( [available = [i: (wbox(p1) = t), i:(bdia(p2) = f)], used=[], relations = [r(i, j), r(i,i)] ] ).
 
-test_object5( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], relations = [r(i,i)] ] ).
+test_object6( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], relations = [r(i,i)] ] ).
 
-test_object6( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [r(i,i)] ] ).
+test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [r(i,i)] ] ).
 
-test_object7( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
+test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
 
-test_object8( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
+test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
 
-test_object9( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
+
+
 
 
 
