@@ -122,7 +122,6 @@ refute(State, [f_disj | Rules]) :-
 
 %% N-Negation true, Non-destructive rule
 
-
 refute(State, [t_nneg | Rules]) :-
       has_available_formula(State, S:(nneg(Phi) = t )),
       has_relational_formula(State, h(S, T)),
@@ -133,28 +132,15 @@ refute(State, [t_nneg | Rules]) :-
       print(newstate(NewState1)),
       refute(NewState1, Rules). 
 
-%% E-Negation false
 
-
-/*
-
-refute(State, [f_eneg | Rules]) :- 
-      consume_formula(State, S: (eneg(Phi) = f), NewState1),
-      has_relational_formula(State, h(T, S)),
-      add_formula_to_available(NewState1, T: (Phi = t), NewState2),
-      applying(f_eneg),
-      print(newstate(NewState2)),
-      refute(NewState2, Rules). 
-*/
-
-
+%% E-Negation false, Non-destructive rule
 
 refute(State, [f_eneg | Rules]) :-
       has_available_formula(State, S:(eneg(Phi) = f )),
       has_relational_formula(State, h(T, S)),
-      %%\+( member( T:(Phi = t), available) ),
-      (\+(has_available_formula(State, T: (Phi = t)))),
-      add_formula_to_available(State, T:(Phi = t), NewState1),
+      add_formula_if_new(State, T:(Phi = t), NewState),
+      \+(State = NewState),
+      !,
       applying(f_eneg),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
@@ -251,7 +237,7 @@ test_object7( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = 
 test_object8( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
 
-test_object9( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i,j)] ] ).
+test_object9( [available = [i: (nneg(p1) = t), j: (ubox(p2) = t)], used=[], relations = [h(i,i)] ] ).
 
 
 
