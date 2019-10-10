@@ -116,6 +116,7 @@ refute(State, [f_disj | Rules]) :-
       consume_formula(State, S: (or(Phi, Psi) = f), NewState1),
       add_formula_if_new(NewState1, S:(Phi = f), NewState2),
       add_formula_if_new(NewState2, S:(Psi = f), Newstate3),
+      !,
       applying(f_disj),
       print(newstate(Newstate3)),
       refute(Newstate3, Rules). 
@@ -138,8 +139,8 @@ refute(State, [t_nneg | Rules]) :-
 refute(State, [f_eneg | Rules]) :-
       has_available_formula(State, S:(eneg(Phi) = f )),
       has_relational_formula(State, h(T, S)),
-      add_formula_if_new(State, T:(Phi = t), NewState),
-      \+(State = NewState),
+      add_formula_if_new(State, T:(Phi = t), NewState1),
+      \+(State = NewState1),
       !,
       applying(f_eneg),
       print(newstate(NewState1)),
@@ -224,7 +225,8 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (eneg(p1) = f)], used=[], relations = [h(j,i), h(i,i)] ] ).
+
+test_object3( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
 test_object4( [available = [i: (wbox(p1) = t), i:(bdia(p2) = f)], used=[], relations = [r(i, j), r(i,i)] ] ).
 
@@ -237,7 +239,7 @@ test_object7( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = 
 test_object8( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
 
-test_object9( [available = [i: (nneg(p1) = t), j: (ubox(p2) = t)], used=[], relations = [h(i,i)] ] ).
+test_object9( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
 
 
