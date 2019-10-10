@@ -151,8 +151,9 @@ refute(State, [f_eneg | Rules]) :-
 refute(State, [t_wbox | Rules]) :-
       has_available_formula(State, S:(wbox(Phi) = t)),
       has_relational_formula(State, r(S, T)),
-      (\+(has_available_formula(State, T: (Phi = t)))),
-      add_formula_to_available(State, T:(Phi = t), NewState1),
+      add_formula_if_new(State, T:(Phi = t), NewState1),
+      \+(State = NewState1),
+      !,
       applying(t_wbox),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
@@ -163,25 +164,15 @@ refute(State, [t_wbox | Rules]) :-
 refute(State, [f_bdia | Rules]) :-
       has_available_formula(State, S:(bdia(Phi) = f)),
       has_relational_formula(State, r(T, S)),
-      (\+(has_available_formula(State, T: (Phi = f)))),
-      add_formula_to_available(State, T:(Phi = f), NewState1),
+      add_formula_if_new(State, T:(Phi = f), NewState1),
+        \+(State = NewState1),
+      !,
       applying(f_bdia),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
 
 %% Universal Box true
-/*
-refute(State, [t_ubox | Rules]) :-
-      has_available_formula(State, _S:(ubox(Phi) = t)),
-      has_available_formula( State, T: (_)),
-      (\+(has_available_formula(State, T: (Phi = t)))),
-      (\+(has_used_formula(State, T: (Phi = t)))),
-      add_formula_to_available(State, T:(Phi = t), NewState1),
-      !,
-      applying(t_ubox),
-      print(newstate(NewState1)),
-      refute(NewState1, Rules).
-*/
+
 refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
       has_available_formula( State, T: (_)),
@@ -238,6 +229,9 @@ test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], rel
 test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
 
 test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
+
+
+
 
 
 
