@@ -146,7 +146,7 @@ refute(State, [f_eneg | Rules]) :-
       print(newstate(NewState1)),
       refute(NewState1, Rules).
 
-%% White Box true
+%% White Box true, Non-destructive rule
 
 refute(State, [t_wbox | Rules]) :-
       has_available_formula(State, S:(wbox(Phi) = t)),
@@ -159,19 +159,19 @@ refute(State, [t_wbox | Rules]) :-
       refute(NewState1, Rules).
  
 
- %% Black Diamond false
+ %% Black Diamond false, Non-destructive rule
 
 refute(State, [f_bdia | Rules]) :-
       has_available_formula(State, S:(bdia(Phi) = f)),
       has_relational_formula(State, r(T, S)),
       add_formula_if_new(State, T:(Phi = f), NewState1),
-        \+(State = NewState1),
+      \+(State = NewState1),
       !,
       applying(f_bdia),
       print(newstate(NewState1)),
       refute(NewState1, Rules).
 
-%% Universal Box true
+%% Universal Box true, Non-destructive rule
 
 refute(State, [t_ubox | Rules]) :-
       has_available_formula(State, _S:(ubox(Phi) = t)),
@@ -185,7 +185,7 @@ refute(State, [t_ubox | Rules]) :-
 
 
 
-%% Universal Diamond false
+%% Universal Diamond false, Non-destructive rule
 
 refute(State, [f_udia | Rules]) :-
       has_available_formula(State, _S:(udia(Phi) = f)),
