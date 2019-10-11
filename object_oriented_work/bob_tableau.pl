@@ -217,7 +217,7 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (nneg(p1) = t)], used=[], relations = [h(i, j) ] ] ).
+test_object3( [available = [i: (nneg(p1) = t), j:(p2=f), k:(p3 =t)], used=[], relations = [h(i, j) ] ] ).
 
 test_object4( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
@@ -233,10 +233,14 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 
 
-/*
+
 
 %% ----------------- ADD H-REFLEXIVITY LABELS---------------------
 
+\*
+
+%% this predicate is the first one written: it find all the possible solutions
+%% but not together
 
 add_H_reflexive(State, State_with_H_reflexive) :-
        ob_prop_val(State, available, Available_formulae),
@@ -246,14 +250,62 @@ add_H_reflexive(State, State_with_H_reflexive) :-
        add_rel_formula_to_relations(State, h(S,S), State_with_H_reflexive).  
 
 
+%% this predicate finds only the first solution, so the refle. for the first label occuring in available.
+
+add_H_reflexive0(State, NewState1_reflexive) :-
+       ob_prop_val(State, available, [S:(_) | _Rest_available_formulae]),
+       ob_prop_val(State, relations, Rel_formulae),
+       \+(member(h(S, S), Rel_formulae)),
+       add_rel_formula_to_relations(State, h(S,S), NewState1_reflexive). 
+
+
+%% this one is simiar to the first one, but there is no use in specifiying Rest
+
+add_H_reflexive1(State, State_with_H_reflexive) :-
+       ob_prop_val(State, available, Available_formulae),
+       ob_prop_val(State, relations, Rel_formulae),
+       select(S:(_), Available_formulae, _Rest),
+       \+(member(h(S, S), Rel_formulae)),
+       add_rel_formula_to_relations(State, h(S,S), State_with_H_reflexive).
+
+
+%% this one is bad, exceeds of memory
+
+add_H_reflexive2( State, State1) :-
+               ob_prop_val(State, available, [S:(_) | Rest]),
+               ob_prop_val(State1, available, [S:(_) | Rest]),
+               ob_prop_val(State, relations, Rel_formulae),
+               \+(member(h(S, S), Rel_formulae)),
+               add_rel_formula_to_relations(State, h(S,S), State1).
+
+%% these follwing dont work
+
+add_H_reflexive4(State, State1) :- ob_prop_val(State, available, []),
+                           ob_prop_val(State1, available, []). 
+
+
+add_H_reflexive5(State, State1) :- 
+                ob_prop_val(State, available, [S:(_) | _Rest]),
+                ob_prop_val(State, relations, Rel_formulae),
+                \+(member(h(S, S), Rel_formulae)),
+               add_rel_formula_to_relations(State, h(S,S), State1).
+
+
+add_H_reflexive7(State, State1) :-
+                 ob_prop_val(State, available, [S:(_) | _Rest]),
+                 add_formula_to_available(State, h(S,S), State1).
+
+add_H_reflexive9([available = [] | _Rest], [available = [] | _Rest2]).
+
+
+
 
 prove(State, Rules) :- 
       add_H_reflexive(State, State_with_H_reflexive),
       refute(State_with_H_reflexive, Rules). 
 
-*/
 
-
+\*
 
 
 
