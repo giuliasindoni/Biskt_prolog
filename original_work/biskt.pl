@@ -386,7 +386,7 @@ add_labels_h_reflexivity( [], [] ).
 
 add_labels_h_reflexivity( [S:F | Rest], [S:F, h(S,S) | AddRefRest] ) :- 
          \+( member( h(S,S), Rest ) ), !,
-         add_labels_h_reflexivity( Rest, AddRefRest ), !. 
+         add_labels_h_reflexivity( Rest, AddRefRest ). 
 
 /*
 add_labels_h_reflexivity( [S:F | Rest], [S:F | AddRefRest] ) :- 
@@ -564,9 +564,9 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+%%run :- run(12).
 
-:-  initialization(run). 
+%%:-  initialization(run). 
 
 
 
