@@ -377,16 +377,21 @@ first_to_last( [],[]).
 
 first_to_last( [H|T], L) :- append(T,[H], L).
 
+%% found problem with this predicate: add_labels_h_reflexivity([w:(p), v:(q), z:(t), h(v,v)], X).
+%% fails to give X, becaue h(v,v) is already there. It should just not add h(v,v), but add the rest of hs.
+%% also, I think the third predicate is redundant.
+
 add_labels_h_reflexivity( [], [] ).
 
 add_labels_h_reflexivity( [S:F | Rest], [S:F, h(S,S) | AddRefRest] ) :- 
          \+( member( h(S,S), Rest ) ), !,
-         add_labels_h_reflexivity( Rest, AddRefRest ). 
+         add_labels_h_reflexivity( Rest, AddRefRest ), !. 
 
+/*
 add_labels_h_reflexivity( [S:F | Rest], [S:F | AddRefRest] ) :- 
          !,
          add_labels_h_reflexivity( Rest, AddRefRest ). 
-
+*/
 
 different_formulae(Lab1, Lab2, List) :- 
                                       member(Lab1:(F1= S1), List),
