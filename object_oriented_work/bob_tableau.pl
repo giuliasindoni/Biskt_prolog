@@ -250,91 +250,18 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 
 %% ----------------- ADD H-REFLEXIVITY LABELS---------------------
-/*
-
-%% this predicate is the first one written: it find all the possible solutions
-%% but not together
-
-add_H_reflexive(State, State_with_H_reflexive) :-
-       ob_prop_val(State, available, Available_formulae),
-       ob_prop_val(State, relations, Rel_formulae),
-       member(S:(_), Available_formulae),
-       \+(member(h(S, S), Rel_formulae)),
-       add_rel_formula_to_relations(State, h(S,S), State_with_H_reflexive).  
-
-
-
-
-
-%% this predicate finds only the first solution, so the reflexivity. for the first label occuring in available.
-
-add_H_reflexive0(State, NewState1_reflexive) :-
-       ob_prop_val(State, available, [S:(_) | _Rest_available_formulae]),
-       ob_prop_val(State, relations, Rel_formulae),
-       \+(member(h(S, S), Rel_formulae)),
-       add_rel_formula_to_relations(State, h(S,S), NewState1_reflexive).
-
-
-
-prove(State, Rules) :- 
-      add_H_reflexive(State, State_with_H_reflexive),
-      refute(State_with_H_reflexive, Rules). 
-
-
-
-
-
-prove(State, Rules) :-
-      has_available_formula( State, S: (_)),
-      add_rel_formula_to_relations(State, h(S,S), NewState1),
-      \+(State = NewState1),
-       !,
-       prove(NewState1, Rules),
-      refute(NewState1, Rules).
-
-
-%% Test for a base case with only one formula in available--not working
-
-add_H_reflexive(S1, S2) :-
-                 ob_prop_val(S1, available, [S:(Phi)]),
-                 ob_prop_val(S2, available, [S:(Phi)]),
-                 ob_prop_val(S1, relations, []),
-                 ob_prop_val(S2, relations, [h(S,S)]),
-                 ob_prop_val(S1, used, []),
-                 ob_prop_val(S2, used, []),
-                 !. 
-
-
-add_H_reflexive(State, State_with_H_reflexive) :-
-      ob_prop_val(State, available, Available_formulae),
-      findall(Label, member(Label:(_), Available_formulae), L),
-      (member(X, L) ->
-      add_rel_formula_to_relations(State, h(X, X), State_with_H_reflexive)).  
-
-
-
-
-print_h_refl(S1) :- 
-               ob_prop_val(S1, available, Available),
-               findall(Label, member(Label:(_), Available), _L),
-               print(h(Label, Label)).
-*/
 
 %% this predicate holds between a state and the list of labels by which logic formulae are indexed
-%% notuce that the list "List" doesnt contain any repetion, thanks to the predicate sort. 
-
-
-
+%% notice that the list "List" doesnt contain any repetion, thanks to the predicate sort. 
 
 list_of_labels(S1, List) :-
                     ob_prop_val(S1, available, Available),
                     findall(Label, member(Label:(_), Available), List1),
-                    sort(List1, List).                 
+                    sort(List1, List).         
+                            
                    
-
 %% this recursive predicate hold between a list of labels and the identity relation list 
 %% on that list of labels 
-
 
 list_H_reflexive([X], [h(X, X)]).
 
