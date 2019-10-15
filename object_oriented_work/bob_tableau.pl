@@ -324,14 +324,24 @@ print_h_refl(S1) :-
 
 
 
+%% this predicate holds between a state and the list of labels by which logic formulae are indexed
+
 list_of_labels(S1, List) :-
                     ob_prop_val(S1, available, Available),
                     findall(Label, member(Label:(_), Available), List).
+
+%% this recursive predicate hold between a list of labels and the identity relation list 
+%% on that list of labels 
+
 
 list_H_reflexive([X], [h(X, X)]).
 
 list_H_reflexive( [X |Rest], [h(X, X) | AddRest]) :- list_H_reflexive(Rest, AddRest). 
 
+
+%% this predicate holds between a state and another state where the latter is the same as the former 
+%% but the lst of relations include H(X, X) for every X in labels. NB relation-list of state has to be empty
+%% otherrwise it just gets overwritten due to set_ob_prop_val.
 
  add_H_reflexive(State, State_with_H_reflexive) :-
                  list_of_labels(State, List_of_labels),
@@ -339,8 +349,7 @@ list_H_reflexive( [X |Rest], [h(X, X) | AddRest]) :- list_H_reflexive(Rest, AddR
                  set_ob_prop_val(State, relations, List_H_reflexive, State_with_H_reflexive). 
 
 
-
-
+%% refute state with H reflexivity instead of just state. 
 
 prove(State, Rules) :- 
       add_H_reflexive(State, State_with_H_reflexive),
