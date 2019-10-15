@@ -79,11 +79,11 @@ add_rel_formula_to_relations(State, Rel_formula, NewState) :-
                              \+(member(Rel_formula, Rel_formulae)),
                              set_ob_prop_val(State, relations, [Rel_formula | Rel_formulae], NewState). 
 
-/*
+
 
 
 %% ----------------  RULE FOR H-REFLEXIVITY --------------------
-
+/*
 refute(State, [h_reflexive | Rules]) :- 
        has_available_formula( State, S: (_)),
        add_rel_formula_to_relations(State, h(S,S), NewState1),
@@ -231,7 +231,7 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t), k:(eneg(p2) = f)], used=[], relations = [ ] ] ).
+test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t), i:(eneg(p2) = f)], used=[], relations = [ ] ] ).
 
 test_object4( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
@@ -250,8 +250,7 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 
 %% ----------------- ADD H-REFLEXIVITY LABELS---------------------
-
-  /*
+/*
 
 %% this predicate is the first one written: it find all the possible solutions
 %% but not together
@@ -319,16 +318,19 @@ print_h_refl(S1) :-
                ob_prop_val(S1, available, Available),
                findall(Label, member(Label:(_), Available), _L),
                print(h(Label, Label)).
-
 */
 
-
-
 %% this predicate holds between a state and the list of labels by which logic formulae are indexed
+%% notuce that the list "List" doesnt contain any repetion, thanks to the predicate sort. 
+
+
+
 
 list_of_labels(S1, List) :-
                     ob_prop_val(S1, available, Available),
-                    findall(Label, member(Label:(_), Available), List).
+                    findall(Label, member(Label:(_), Available), List1),
+                    sort(List1, List).                 
+                   
 
 %% this recursive predicate hold between a list of labels and the identity relation list 
 %% on that list of labels 
