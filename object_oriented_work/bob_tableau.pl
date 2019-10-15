@@ -290,7 +290,8 @@ prove(State, Rules) :-
 %% relation list.
 %% odd thing to fix:  member( h(Label, _X), Relations); member( h(_X, Label), Relations) we should have a variable for a generic relation
 %% instead of a specific relation as h, because also r-relations have to be considered
-%% but with a variable instead of a constant the KB does not compile 
+%% but with a variable instead of a constant the KB does not compile
+%% maybe sowthing to do with the ; predicate (or) 
 
 list_of_labels2(S1, List) :-
                     ob_prop_val(S1, available, Available),
