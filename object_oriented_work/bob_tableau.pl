@@ -284,8 +284,8 @@ prove(State, Rules) :-
       add_H_reflexive(State, State_with_H_reflexive),
       refute(State_with_H_reflexive, Rules). 
 
-/*
 
+/*
 %% This predicate is a variation of list_of_labels: it takes into account also the labels appearing in the 
 %% relation list.
 %% odd thing to fix:  member( h(Label, _X), Relations); member( h(_X, Label), Relations) we should have a variable for a generic relation
@@ -296,7 +296,7 @@ prove(State, Rules) :-
 list_of_labels2(S1, List) :-
                     ob_prop_val(S1, available, Available),
                     ob_prop_val(S1, relations, Relations),
-                    findall(Label, (member(Label:(_), Available); member(h(Label, _X), Relations); member(h(_X, Label), Relations)), L1),
+                    findall(Label, ( (member(Label:(_), Available)) ; (member(h(Label, _X), Relations)) ; (member(h(_X, Label), Relations))) , L1),
                     sort(L1, List), !.
 
 
