@@ -257,7 +257,7 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 list_of_labels(S1, List) :-
                     ob_prop_val(S1, available, Available),
                     findall(Label, member(Label:(_), Available), List1),
-                    sort(List1, List).         
+                    sort(List1, List), !.         
 
                    
 %% this recursive predicate hold between a list of labels and the identity relation list 
@@ -298,6 +298,8 @@ list_of_labels2(S1, List) :-
                     ob_prop_val(S1, relations, Relations),
                     findall(Label, (member(Label:(_), Available); member(h(Label, _X), Relations); member(h(_X, Label), Relations)), L1),
                     sort(L1, List), !.
+
+
  %% This predicate is a variant of add_H_reflexive: it works with list_of_labels2
  %% and it adds to the relation list also the  Hreflexivity on the labels thta occur in the relation-list and not in the available-list necessarily
  %% also, it adds the reflexivity of H to the relation list without deleting the relations that were present from the input 
