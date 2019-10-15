@@ -269,8 +269,8 @@ list_H_reflexive( [X |Rest], [h(X, X) | AddRest]) :- list_H_reflexive(Rest, AddR
 
 
 %% this predicate holds between a state and another state where the latter is the same as the former 
-%% but the lst of relations include H(X, X) for every X in labels. NB relation-list of state has to be empty
-%% otherrwise it just gets overwritten due to set_ob_prop_val.
+%% but its list of relations include H(X, X) for every X in labels. NB relation-list of state has to be empty
+%% otherrwise it just gets overwritten due to set_ob_prop_val. 
 
  add_H_reflexive(State, State_with_H_reflexive) :-
                  list_of_labels(State, List_of_labels),
