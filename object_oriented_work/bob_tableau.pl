@@ -231,7 +231,7 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t), i:(eneg(p2) = f)], used=[], relations = [ ] ] ).
+test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t), k:(eneg(p2) = f)], used=[], relations = [ ] ] ).
 
 test_object4( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
@@ -306,5 +306,45 @@ add_H_reflexive(S1, S2) :-
                  !. 
 
 
+add_H_reflexive(State, State_with_H_reflexive) :-
+      ob_prop_val(State, available, Available_formulae),
+      findall(Label, member(Label:(_), Available_formulae), L),
+      (member(X, L) ->
+      add_rel_formula_to_relations(State, h(X, X), State_with_H_reflexive)).  
+
+
+
+
+print_h_refl(S1) :- 
+               ob_prop_val(S1, available, Available),
+               findall(Label, member(Label:(_), Available), _L),
+               print(h(Label, Label)).
 
 */
+
+
+
+list_of_labels(S1, List) :-
+                    ob_prop_val(S1, available, Available),
+                    findall(Label, member(Label:(_), Available), List).
+
+list_H_reflexive([X], [h(X, X)]).
+
+list_H_reflexive( [X |Rest], [h(X, X) | AddRest]) :- list_H_reflexive(Rest, AddRest). 
+
+
+ add_H_reflexive(State, State_with_H_reflexive) :-
+                 list_of_labels(State, List_of_labels),
+                 list_H_reflexive(List_of_labels, List_H_reflexive),
+                 set_ob_prop_val(State, relations, List_H_reflexive, State_with_H_reflexive). 
+
+
+
+
+
+prove(State, Rules) :- 
+      add_H_reflexive(State, State_with_H_reflexive),
+      refute(State_with_H_reflexive, Rules). 
+
+
+
