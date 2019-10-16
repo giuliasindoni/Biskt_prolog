@@ -231,7 +231,7 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t), i:(eneg(p2) = f)], used=[], relations = [h(i, k)  ] ] ).
+test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t) ], used=[], relations = [h(i, k)] ] ).
 
 test_object4( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
@@ -284,14 +284,10 @@ prove(State, Rules) :-
       add_H_reflexive(State, State_with_H_reflexive),
       refute(State_with_H_reflexive, Rules). 
 
-
+/*
 
 %% This predicate is a variation of list_of_labels: it takes into account also the labels appearing in the 
 %% relation list.
-%% odd thing to fix:  member( h(Label, _X), Relations); member( h(_X, Label), Relations) we should have a variable for a generic relation
-%% instead of a specific relation as h, because also r-relations have to be considered
-%% but with a variable instead of a constant the KB does not compile
-%% maybe sowthing to do with the ; predicate (or) 
 
 list_of_labels2(S1, List) :-
                     ob_prop_val(S1, available, Available),
@@ -312,18 +308,20 @@ is_label_of( Label, Relation_Formula ) :- Relation_Formula =.. [_, X, Y], (Label
 
 
  %% This predicate is a variant of add_H_reflexive: it works with list_of_labels2
- %% and it adds to the relation list also the  Hreflexivity on the labels thta occur in the relation-list and not in the available-list necessarily
- %% also, it adds the reflexivity of H to the relation list without deleting the relations that were present from the input 
+ %% and it adds to the relation list also the H-reflexivity on the labels that occur in the relation-list and not in the available-list necessarily
+ %% also, it adds the reflexivity of H to the relation list without deleting the relations that were present from the input
+ %% we could use sort to eliminate the duplicate, say if for ex h(i,i) was there from the input(even if it shouldnt) we dont add it twice
  %% Indeed if we use set_ob_prop_val when we assume that we can start from a non-empty list of relstions as input
  %% we would overwrite this list of relations with a new list -- the reflexivity of H only          
-%% if we want to use add_H_reflexive2 instead of add_H_reflexive we need to change it into prove predicate
+%% if we want to use add_H_reflexive2 instead of add_H_reflexive we need to change it inside the prove predicate
 
 add_H_reflexive2(State, State_with_H_reflexive) :-
                  list_of_labels2(State, List_of_labels),
                  list_H_reflexive(List_of_labels, List_H_reflexive),
                  select(relations = Relations, State, Rest),
                  append(List_H_reflexive, Relations, UnionList_ofrelations),
-                 State_with_H_reflexive = [ relations = UnionList_ofrelations | Rest]. 
+                 sort(UnionList_ofrelations, UnionList_ofrelations1),
+                 State_with_H_reflexive = [ relations = UnionList_ofrelations1 | Rest]. 
 
 
-
+*/
