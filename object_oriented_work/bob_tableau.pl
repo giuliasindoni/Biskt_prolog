@@ -231,7 +231,7 @@ test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
-test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t), i:(eneg(p2) = f)], used=[], relations = [ h(m, i) ] ] ).
+
 
 test_object4( [available = [i: (eneg(p1) = f)], used=[], relations = [h(i,i), h(j, i)] ] ).
 
@@ -285,7 +285,7 @@ prove(State, Rules) :-
       refute(State_with_H_reflexive, Rules). 
 
 
-/*
+
 %% This predicate is a variation of list_of_labels: it takes into account also the labels appearing in the 
 %% relation list.
 %% odd thing to fix:  member( h(Label, _X), Relations); member( h(_X, Label), Relations) we should have a variable for a generic relation
@@ -296,8 +296,19 @@ prove(State, Rules) :-
 list_of_labels2(S1, List) :-
                     ob_prop_val(S1, available, Available),
                     ob_prop_val(S1, relations, Relations),
-                    findall(Label, ( (member(Label:(_), Available)) ; (member(h(Label, _X), Relations)) ; (member(h(_X, Label), Relations))) , L1),
-                    sort(L1, List), !.
+                    %findall(Label, ( (member(Label:(_), Available)) ; (member(h(Label, _X), Relations)) ; (member(h(_X, Label), Relations))) , L1),
+                    possibly_empty_setof( Lab, (is_label_in(Lab, Available) ; is_label_in( Lab, Relations) ), List ), !.
+                    %sort(L1, List), !.
+
+possibly_empty_setof( X, G, S) :- setof(X,G,S), !.
+possibly_empty_setof( _, _, []).
+
+is_label_in( Label, List ) :- member( X, List ), is_label_of(Label, X).
+
+is_label_of( Label, Formula ) :- Formula =  Label:(_), !.
+is_label_of( Label, Relation ) :- Relation =.. [_, X, Y], (Label = X ; Label = Y).
+
+
 
 
  %% This predicate is a variant of add_H_reflexive: it works with list_of_labels2
@@ -314,5 +325,5 @@ add_H_reflexive2(State, State_with_H_reflexive) :-
                  append(List_H_reflexive, Relations, UnionList_ofrelations),
                  State_with_H_reflexive = [ relations = UnionList_ofrelations | Rest]. 
 
-*/
+
 
