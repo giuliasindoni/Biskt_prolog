@@ -1,3 +1,11 @@
+%% TO DO LIST:
+%% we need a refute predicate such that 
+%% if there no more rules applicable 
+%% to a set of formulae (so an open branch)
+%% then the refutation process fail 
+%% and the formula set is shown
+%% so that for example in the branching rules we do not refute both branches if the first one is open
+
 %% META-LEVEl RULES 
 
 %% Objects are property value lists:
@@ -42,7 +50,7 @@ consume_formula( State, Formula, NewState ):-
            ob_prop_val( State, used, FU ),
            select( Formula, FA, Rest ),
            set_ob_prop_val( State, available, Rest, NewState1 ),
-          set_ob_prop_val( NewState1, used, [Formula | FU], NewState ).
+           set_ob_prop_val( NewState1, used, [Formula | FU], NewState ).
 
 
 /* 
@@ -115,7 +123,7 @@ refute(State, [false_is_true]) :-
 %% the conclusions are in available formula or in used formula  
 
 refute( State, [t_con | Rules] ):-
-     consume_formula( State, S:(and(Phi,Psi)=t), NewState1 ),
+      consume_formula( State, S:(and(Phi,Psi)=t), NewState1 ),
       add_formula_if_new( NewState1, S:(Phi=t), NewState2 ),
       add_formula_if_new( NewState2, S:(Psi=t), Newstate3 ),
       !,
@@ -218,7 +226,17 @@ refute(State, [f_udia | Rules]) :-
 
 %% ---------------------- BRANCHING-RULES ------------------------------
 
-
+%% True disjunction
+refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
+        consume_formula( State, S:(or(Phi,Psi)=t), NewState1 ),
+        add_formula_if_new(NewState1, S:(Phi=t), NewState2),
+        add_formula_if_new(NewState1, S:(Psi = t), Newstate3),
+        !,
+        applying(t_dis),
+        print(newstate_B1(NewState2)),
+        print(newstate_B2(Newstate3)),
+        refute(NewState2, Rules1),
+        refute(Newstate3, Rules2). 
 
 
 
@@ -227,7 +245,7 @@ applying( Rule ):- write('Applying: '), write(Rule), nl.
 
 %% ------------------------------ TESTS ------------------------------
 
-test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], used=[d,e]] ).
+test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], relations= [], used=[]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
@@ -244,6 +262,8 @@ test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[] ] ).
 test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
 
 test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
+
+test_object10( [available = [i: (or(p1,p2)=t), i:(p1 = f), i:(p2 = f)], used=[], relations = [] ] ).
 
 
 
@@ -281,7 +301,6 @@ is_label_of( Label, Relation_Formula ) :- Relation_Formula =.. [_, X, Y], (Label
 list_H_reflexive([X], [h(X, X)]).
 
 list_H_reflexive( [X |Rest], [h(X, X) | AddRest]) :- list_H_reflexive(Rest, AddRest), !. 
-
 
 
 
