@@ -540,6 +540,14 @@ example(26, [],
 example(27, [], 
   i: (udia(whitebox(p1)) = t )).
 
+example(28, [], 
+  i: ( imp(udia(eneg(nneg(p))), udia(p)) = t )).
+
+
+example(29, [], 
+  i: ( imp(udia(nneg(eneg(p))), udia(p)) = t )).
+
+
 
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
@@ -564,7 +572,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(29).
 
 :-  initialization(run). 
 
