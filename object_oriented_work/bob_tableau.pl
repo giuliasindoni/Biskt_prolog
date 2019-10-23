@@ -251,6 +251,64 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 %% ----------------- ADD H-REFLEXIVITY LABELS---------------------
 
+%% This predicate is a variation of list_of_labels: it takes into account also the labels appearing in the 
+%% relation list.
+
+list_of_labels2(S1, List) :-
+                    ob_prop_val(S1, available, Available),
+                    ob_prop_val(S1, relations, Relations),
+                    possibly_empty_setof( Lab, (is_label_in(Lab, Available) ; is_label_in( Lab, Relations) ), List ), !.
+                    
+
+
+possibly_empty_setof( X, G, S) :- setof(X,G,S), !.
+possibly_empty_setof( _, _, []).
+
+%% predicate holding between a label and a list in which the label occurs
+
+is_label_in( Label, Avail_or_Rel_List ) :- member( X, Avail_or_Rel_List), is_label_of(Label, X).
+
+
+%% predicate holding between a label and the logic or relation formula that the label labels
+
+is_label_of( Label, Logic_Formula ) :- Logic_Formula =  Label:(_), !.
+is_label_of( Label, Relation_Formula ) :- Relation_Formula =.. [_, X, Y], (Label = X ; Label = Y).
+
+
+%% this recursive predicate hold between a list of labels and the identity relation list 
+%% on that list of labels 
+
+list_H_reflexive([X], [h(X, X)]).
+
+list_H_reflexive( [X |Rest], [h(X, X) | AddRest]) :- list_H_reflexive(Rest, AddRest), !. 
+
+
+
+
+ %% This predicate is a variant of add_H_reflexive: it works with list_of_labels2
+ %% and it adds to the relation list also the H-reflexivity on the labels that occur in the relation-list, and not in the available-list necessarily
+ %% also, it adds the reflexivity of H to the relation list without deleting the relations that were present from the input
+ %% we could use sort to eliminate the duplicate, say if for ex h(i,i) was there from the input(even if it shouldnt) we dont add it twice
+ %% Indeed if we use set_ob_prop_val when we assume that we can start from a non-empty list of relations as input
+ %% we would overwrite this list of relations with a new list -- the reflexivity of H only          
+
+add_H_reflexive2(State, State_with_H_reflexive) :-
+                 list_of_labels2(State, List_of_labels),
+                 list_H_reflexive(List_of_labels, List_H_reflexive),
+                 select(relations = Relations, State, Rest),
+                 append(List_H_reflexive, Relations, UnionList_ofrelations),
+                 sort(UnionList_ofrelations, UnionList_ofrelations1),
+                 State_with_H_reflexive = [ relations = UnionList_ofrelations1 | Rest]. 
+
+
+
+%% refute state with H reflexivity instead of just state. 
+prove(State, Rules) :- 
+      add_H_reflexive2(State, State_with_H_reflexive),
+      refute(State_with_H_reflexive, Rules). 
+
+
+/*
 %% this predicate holds between a state and the list of labels by which logic formulae are indexed
 %% notice that the list "List" doesnt contain any repetion, thanks to the predicate sort. 
 
@@ -276,52 +334,6 @@ list_H_reflexive( [X |Rest], [h(X, X) | AddRest]) :- list_H_reflexive(Rest, AddR
                  list_of_labels(State, List_of_labels),
                  list_H_reflexive(List_of_labels, List_H_reflexive),
                  set_ob_prop_val(State, relations, List_H_reflexive, State_with_H_reflexive). 
-
-
-%% refute state with H reflexivity instead of just state. 
-
-prove(State, Rules) :- 
-      add_H_reflexive(State, State_with_H_reflexive),
-      refute(State_with_H_reflexive, Rules). 
-
-/*
-
-%% This predicate is a variation of list_of_labels: it takes into account also the labels appearing in the 
-%% relation list.
-
-list_of_labels2(S1, List) :-
-                    ob_prop_val(S1, available, Available),
-                    ob_prop_val(S1, relations, Relations),
-                    %findall(Label, ((member(Label:(_), Available)) ; (member(h(Label, _Z), Relations)) ; (member(h(_Z, Label), Relations))) , L1),
-                    possibly_empty_setof( Lab, (is_label_in(Lab, Available) ; is_label_in( Lab, Relations) ), List ), !.
-                    %sort(L1, List), !.
-
-possibly_empty_setof( X, G, S) :- setof(X,G,S), !.
-possibly_empty_setof( _, _, []).
-
-is_label_in( Label, Avail_or_Rel_List ) :- member( X, Avail_or_Rel_List), is_label_of(Label, X).
-
-is_label_of( Label, Logic_Formula ) :- Logic_Formula =  Label:(_), !.
-is_label_of( Label, Relation_Formula ) :- Relation_Formula =.. [_, X, Y], (Label = X ; Label = Y).
-
-
-
-
- %% This predicate is a variant of add_H_reflexive: it works with list_of_labels2
- %% and it adds to the relation list also the H-reflexivity on the labels that occur in the relation-list and not in the available-list necessarily
- %% also, it adds the reflexivity of H to the relation list without deleting the relations that were present from the input
- %% we could use sort to eliminate the duplicate, say if for ex h(i,i) was there from the input(even if it shouldnt) we dont add it twice
- %% Indeed if we use set_ob_prop_val when we assume that we can start from a non-empty list of relstions as input
- %% we would overwrite this list of relations with a new list -- the reflexivity of H only          
-%% if we want to use add_H_reflexive2 instead of add_H_reflexive we need to change it inside the prove predicate
-
-add_H_reflexive2(State, State_with_H_reflexive) :-
-                 list_of_labels2(State, List_of_labels),
-                 list_H_reflexive(List_of_labels, List_H_reflexive),
-                 select(relations = Relations, State, Rest),
-                 append(List_H_reflexive, Relations, UnionList_ofrelations),
-                 sort(UnionList_ofrelations, UnionList_ofrelations1),
-                 State_with_H_reflexive = [ relations = UnionList_ofrelations1 | Rest]. 
-
-
 */
+
+
