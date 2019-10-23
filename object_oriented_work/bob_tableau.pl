@@ -6,6 +6,12 @@
 %% and the formula set is shown
 %% so that for example in the branching rules we do not refute both branches if the first one is open
 
+
+%%We need to put a refute rule so that when no more rules
+%%are applicable to a branch, so there is open branch,
+%%the program fails and print this open branch with the message that the original formula cannot be refuted.
+ 
+
 %% META-LEVEl RULES 
 
 %% Objects are property value lists:
@@ -223,7 +229,6 @@ refute(State, [f_udia | Rules]) :-
 
 
 
-
 %% ---------------------- BRANCHING-RULES ------------------------------
 
 %% True disjunction
@@ -263,7 +268,7 @@ test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = 
 
 test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
-test_object10( [available = [i: (or(p1,p2)=t), i:(p1 = f), i:(p2 = f)], used=[], relations = [] ] ).
+test_object10( [available = [i: (or(p1,p2)=t)], used=[], relations = [] ] ).
 
 
 
