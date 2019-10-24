@@ -243,6 +243,15 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         refute(NewState2, Rules1),
         refute(Newstate3, Rules2). 
 
+refute(State, _) :- !,
+      nl, nl, write( '!! CANNOT REFUTE !!' ), nl,
+      write( '!! No rule applicable to the current OPEN BRANCH:'), nl,
+      showlist_ind(State), nl, nl,
+      fail.
+
+showlist_ind([]).
+showlist_ind([H|T]) :- write('     '), write(H), nl, showlist_ind(T).
+
 
 
 applying( Rule ):- write('Applying: '), write(Rule), nl.    
@@ -268,7 +277,7 @@ test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = 
 
 test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
-test_object10( [available = [i: (or(p1,p2)=t)], used=[], relations = [] ] ).
+test_object10( [available = [i: (or(p1,p2)=t), i:(p1 = f)], used=[], relations = [] ] ).
 
 
 
@@ -326,10 +335,10 @@ add_H_reflexive2(State, State_with_H_reflexive) :-
 
 
 
-%% refute state with H reflexivity instead of just state. 
+%%prove predicate refutes state with H reflexivity instead of just state. 
 prove(State, Rules) :- 
       add_H_reflexive2(State, State_with_H_reflexive),
-      refute(State_with_H_reflexive, Rules). 
+      refute(State_with_H_reflexive, Rules), !. 
 
 
 /*
