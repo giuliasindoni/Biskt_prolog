@@ -5,7 +5,11 @@
 %% already present in the branch.
 
 
-%% This just to write the status
+%% This just to write the status.
+%% We need fail because otherwise everything is going to match
+%% to thus first "rule" and will produce a closed refutation tableau
+%% if this we add the fail goal
+%% we will make sure we can go to the other refute predicates as well
 refute( Formulae, _ ) :-
         write( 'refute: ' ), write(Formulae), nl,
         %write( '        ' ), write(Rules), nl,
@@ -576,7 +580,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(29).
+run :- run(12).
 
 :-  initialization(run). 
 
