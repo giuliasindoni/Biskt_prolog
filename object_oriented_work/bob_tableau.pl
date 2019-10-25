@@ -250,12 +250,13 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
 
 
 
-refute(State, _) :-  !,  
-      nl, nl, write( '!! CANNOT REFUTE !!' ), nl,
-      write( '!! No rule applicable to the current OPEN BRANCH:'), nl,
-      showlist_ind(State), nl, nl,
-      fail.
 
+
+refute( State, _ ) :- !,
+      write( '!! CANNOT REFUTE !!' ), nl,
+      write( '!! No rule applicable to the current formula set:'), nl,
+      showlist_ind(State), nl, nl.
+     %% fail.
 
 
 %% This just prints out the elements of a list in a column format 
@@ -291,7 +292,7 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 test_object10( [available = [ i:(or(p1,p2) = t), i:(p1 = f)], used=[], relations = [] ] ).
 
-test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p3 = f)], used=[], relations = [] ] ).
+test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p2 = f), i:(p3 = f)], used=[], relations = [] ] ).
 
 
 
