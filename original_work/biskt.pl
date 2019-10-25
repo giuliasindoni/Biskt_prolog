@@ -548,7 +548,7 @@ example(28, [],
   i: ( imp(udia(eneg(nneg(p))), udia(p)) = t )).
 
 
-example(29, [i:(p1 = f)], 
+example(29, [], 
   i:(or(p1,p2) = f )).
 
 
