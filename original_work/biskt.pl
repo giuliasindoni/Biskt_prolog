@@ -544,8 +544,12 @@ example(28, [],
   i: ( imp(udia(eneg(nneg(p))), udia(p)) = t )).
 
 
-example(29, [], 
+example(29, [i:(p1 = f)], 
   i:(or(p1,p2) = f )).
+
+
+example(30, [i:(p1 = f), i:(p3 = f)],
+          i:(or(p1, or(p2, p3)) = f)).
 
 
 
@@ -572,7 +576,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(12).
+run :- run(29).
 
 :-  initialization(run). 
 
