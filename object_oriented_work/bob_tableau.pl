@@ -248,16 +248,19 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
 %% if no rules are apllicable to a branch-state
 %%stop the refutation process and print the state
 
-refute(State, _) :- !,
+
+
+refute(State, _) :-  !,  
       nl, nl, write( '!! CANNOT REFUTE !!' ), nl,
       write( '!! No rule applicable to the current OPEN BRANCH:'), nl,
       showlist_ind(State), nl, nl,
       fail.
 
 
+
 %% This just prints out the elements of a list in a column format 
 %% used to print elements of state list when open branch is found
-
+%%
 showlist_ind([]).
 showlist_ind([H|T]) :- write('     '), write(H), nl, showlist_ind(T).
 
@@ -286,8 +289,9 @@ test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = 
 
 test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
-test_object10( [available = [i: (or(p1,p2)=t), i:(p1 = f)], used=[], relations = [] ] ).
+test_object10( [available = [ i:(or(p1,p2) = t), i:(p1 = f)], used=[], relations = [] ] ).
 
+test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p3 = f)], used=[], relations = [] ] ).
 
 
 
