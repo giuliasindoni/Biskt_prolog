@@ -488,7 +488,8 @@ example(29, [],
 example(30, [i:(p1 = f)], 
   i:(or(p1,p2) = f )).
 
-example(31, [i:(blackdia(p1) = t), i:(p1 = f), j:(p2 = t)] ).
+example(31, [i:(p1 = f), j:(p2 = t)],
+              i:(blackdia(p1) = f)).
 
 
 prove( EgN, Rules ) :-
@@ -514,7 +515,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(22).
+run :- run(31).
 
 :-  initialization(run). 
 
