@@ -241,7 +241,7 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         applying(t_dis),
         print(newstate_B1(NewState2)),
         print(newstate_B2(Newstate3)),
-        refute(NewState2, Rules1),
+        refute(NewState2, Rules1), !,
         refute(Newstate3, Rules2). 
 
 
@@ -253,10 +253,10 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
 
 
 
-refute( State, _ ) :- !,
+refute( State, _ ) :- !, nl, nl,
       write( '!! CANNOT REFUTE !!' ), nl,
       write( '!! No rule applicable to the current formula set:'), nl,
-      showlist_ind(State), nl, nl,
+      showlist_ind(State), nl, nl, !,
       fail.
 
 
@@ -285,7 +285,7 @@ test_object5( [available = [i: (wbox(p1) = t), i:(bdia(p2) = f)], used=[], relat
 
 test_object6( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], relations = [r(i,i)] ] ).
 
-test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [] ] ).
+test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[] ] ).
 
 test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
 
@@ -293,7 +293,7 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 test_object10( [available = [ i:(or(p1,p2) = t), i:(p1 = f)], used=[], relations = [] ] ).
 
-test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p2 = f), i:(p3 = f)], used=[], relations = [] ] ).
+test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p2 = f)], used=[], relations = [] ] ).
 
 
 
@@ -353,11 +353,10 @@ add_H_reflexive2(State, State_with_H_reflexive) :-
 %%prove predicate refutes state with H reflexivity instead of just state. 
 prove(State, Rules) :- 
       add_H_reflexive2(State, State_with_H_reflexive),
-      refute(State_with_H_reflexive, Rules), !. 
+      refute(State_with_H_reflexive, Rules), !, nl, write('YES! REFUTATION ACCOMPLISHED!'). 
 
-is_a_theorem(State, Rules) :- prove(State, Rules), !, write('Refutation succeeded!').
 
-is_a_theorem(_State, _Rules) :- write('Refutation not succeeded! There is a model for your input'), fail.
+prove(_State, _Rules) :- write('NO! REFUTATION NOT ACCOMPLISHED: THERE IS OPEN BRANCH'), fail.
 
 
 
