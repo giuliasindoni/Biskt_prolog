@@ -21,8 +21,12 @@ refute( Formulae, [tf_close] ) :-
 refute( Formulae, [false_is_t_close] ) :-
       member( _:(false=t), Formulae ), !,
       applying( false_is_t_close ).
+/*
 
-
+refute(Formulae, [r_irreflexive]) :-
+       member(r(S, S), Formulae), !,
+       applying(r_irreflexive).
+*/
 
 %% NON-BRANCHING RULES
 
@@ -481,6 +485,9 @@ example(29, [],
   i: ( imp(udia(nneg(eneg(p))), udia(p)) = t )).
 
 
+example(30, [i:(p1 = f)], 
+  i:(or(p1,p2) = f )).
+
 
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
@@ -505,7 +512,7 @@ run(N) :- prove( N, Rules ), !,
 run(N) :- format( "!! Could not prove example ~p", [N]).
 
 
-run :- run(28).
+run :- run(22).
 
 :-  initialization(run). 
 
