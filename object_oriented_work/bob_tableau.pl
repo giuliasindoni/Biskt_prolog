@@ -244,6 +244,21 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         refute(NewState2, Rules1), !,
         refute(Newstate3, Rules2). 
 
+/*
+%% True blackdia, branching version
+
+
+refute(State, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
+      consume_formula(State, S:(bdia(Phi) = t), NewState1),
+      has_available_formula(State, Y: (_)),
+      T = @(blackdia(Phi),S),
+      add_formula_if_new(NewState1, Y:(Phi = t), NewState2),
+      add_formula_if_new(NewState1, T:(Phi = t), Newstate3),
+      !,
+      applying(t_blackdia),
+      refute(NewState2, Rules1),
+      refute(Newstate3, Rules2). 
+*/
 
 %% ----------------------- REFUTATION FAILS ------------------------------
 %% if no rules are apllicable to a branch-state
@@ -295,9 +310,9 @@ test_object10( [available = [ i:(or(p1,p2) = t), i:(p1 = f)], used=[], relations
 
 test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p2 = f)], used=[], relations = [] ] ).
 
-
-
-
+/*
+test_object12( [ available = [i:(bdia(p1) = t ), i:(p1 = f), j:(p2 = t)], used = [], relations = []   ] ).
+*/
 %% ----------------- ADD H-REFLEXIVITY LABELS---------------------
 
 %% This predicate is a variation of list_of_labels: it takes into account also the labels appearing in the 
