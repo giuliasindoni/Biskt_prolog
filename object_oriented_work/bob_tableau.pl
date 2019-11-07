@@ -285,7 +285,7 @@ test_object5( [available = [i: (wbox(p1) = t), i:(bdia(p2) = f)], used=[], relat
 
 test_object6( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], relations = [r(i,i)] ] ).
 
-test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[] ] ).
+test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [] ] ).
 
 test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
 
