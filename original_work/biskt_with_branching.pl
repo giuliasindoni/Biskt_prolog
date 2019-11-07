@@ -488,6 +488,8 @@ example(29, [],
 example(30, [i:(p1 = f)], 
   i:(or(p1,p2) = f )).
 
+example(31, [i:(blackdia(p1) = t), i:(p1 = f), j:(p2 = t)] ).
+
 
 prove( EgN, Rules ) :-
        example( EgN, Premisses, Conclusion ),
