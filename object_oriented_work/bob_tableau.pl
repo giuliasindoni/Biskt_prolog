@@ -247,7 +247,7 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
 
 %% ----------------------- REFUTATION FAILS ------------------------------
 %% if no rules are apllicable to a branch-state
-%%stop the refutation process and print the state
+%%fail the refutation process and print the state
 
 
 
@@ -256,8 +256,8 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
 refute( State, _ ) :- !,
       write( '!! CANNOT REFUTE !!' ), nl,
       write( '!! No rule applicable to the current formula set:'), nl,
-      showlist_ind(State), nl, nl.
-     %% fail.
+      showlist_ind(State), nl, nl,
+      fail.
 
 
 %% This just prints out the elements of a list in a column format 
@@ -273,7 +273,7 @@ applying( Rule ):- write('Applying: '), write(Rule), nl.
 
 %% ------------------------------ TESTS ------------------------------
 
-test_object( [available = [i:(and(p,p1)=t), i:(p=t), i:(p1=f)], relations= [], used=[]] ).
+test_object( [available = [i:(and(p,p1)=t), i:(p1=f)], relations= [], used=[]] ).
 
 test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
@@ -285,7 +285,7 @@ test_object5( [available = [i: (wbox(p1) = t), i:(bdia(p2) = f)], used=[], relat
 
 test_object6( [available = [i: (bdia(p1) = f), i:(wbox(p1) = t )], used=[], relations = [r(i,i)] ] ).
 
-test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[] ] ).
+test_object7( [available = [i: (ubox(p1) = t),  j:(udia(p1) = f )], used=[], relations = [] ] ).
 
 test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = [] ] ).
 
@@ -354,6 +354,11 @@ add_H_reflexive2(State, State_with_H_reflexive) :-
 prove(State, Rules) :- 
       add_H_reflexive2(State, State_with_H_reflexive),
       refute(State_with_H_reflexive, Rules), !. 
+
+is_a_theorem(State, Rules) :- prove(State, Rules), !, write('Refutation succeeded!').
+
+is_a_theorem(_State, _Rules) :- write('Refutation not succeeded! There is a model for your input'), fail.
+
 
 
 /*
