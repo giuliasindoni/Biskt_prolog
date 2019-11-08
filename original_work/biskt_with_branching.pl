@@ -270,22 +270,31 @@ refute(Formulae, [f_whitebox, [f_whitebox_B1 | Rules1], [f_whitebox_B2 | Rules2]
         refute([r(S, Y), Y:(Phi = f) | Rest ], Rules1),
         refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules2). 
 
-
+/*
 
 %% True black dia, second branching version
 
 refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
-      select(S: (blackdia(Phi) = t), Formulae, Rest),
-      member(Y:(_), Formulae),
+      select(S: (blackdia(Phi) = t), Formulae, Rest), 
+      nl, write('***** doing_blackdia *****'), nl,
+      setof( Lab, F^member(Lab:(F), Formulae), Labels), !,
+      member(Y, Labels),
+      write(trying_label(Y)), nl,
       ( \+(member(r(X, S), Rest))  ;
         \+( member(X:(Phi =t), Rest))),
-      !,
       applying(t_blackdia),
       T = @(blackdia(Phi),S),
-      refute([r(Y, S), Y:(Phi = t) | Rest], Rules1),
-      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
 
+      % Try to refute when added to existing label Y
+      (( refute([r(Y, S), Y:(Phi = t) | Rest], Rules1) 
+        -> fail
+          ; true
+       )
+       ;
+      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2)
+      ).
 
+*/
 
 %% False universal box
 
