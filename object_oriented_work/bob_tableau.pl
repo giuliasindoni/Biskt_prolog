@@ -256,7 +256,7 @@ refute(State, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) 
 refute( State, _ ) :- !, nl, nl,
       write( '!! CANNOT REFUTE !!' ), nl,
       write( '!! No rule applicable to the current formula set:'), nl,
-      showlist_ind(State), nl, nl, !,
+      showlist_ind(State), nl, nl,
       fail.
 
 
