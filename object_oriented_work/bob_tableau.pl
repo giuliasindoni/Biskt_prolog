@@ -1,18 +1,3 @@
-%% TO DO LIST:
-%% we need a refute predicate such that 
-%% if there no more rules applicable 
-%% to a set of formulae (so an open branch)
-%% then the refutation process fail 
-%% and the formula set is shown
-%% so that for example in the branching rules we do not refute both branches if the first one is open
-
-
-
-%%We need to put a refute rule so that when no more rules
-%%are applicable to a branch, so there is open branch,
-%%the program fails and print this open branch with the message that the original formula cannot be refuted.
- 
-
 %% META-LEVEl RULES 
 
 %% Objects are property value lists:
