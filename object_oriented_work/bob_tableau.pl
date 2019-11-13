@@ -241,8 +241,7 @@ refute(State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ]) :-
        print(newstate_B1(NewState2)),
        print(newstate_B2(Newstate3)),
        refute(NewState2, Rules1), !,
- 
-     refute(Newstate3, Rules2). 
+       refute(Newstate3, Rules2). 
 
 /*
 
