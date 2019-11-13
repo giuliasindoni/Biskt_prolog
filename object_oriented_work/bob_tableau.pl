@@ -216,7 +216,7 @@ refute(State, [f_udia | Rules]) :-
 
 
 %% ---------------------- BRANCHING-RULES ------------------------------
-/*
+
 %% True disjunction
 refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         consume_formula( State, S:(or(Phi,Psi)=t), NewState1 ),
@@ -228,7 +228,36 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         print(newstate_B2(Newstate3)),
         refute(NewState2, Rules1), !,
         refute(Newstate3, Rules2). 
-*/
+
+
+%% False Conjuction
+
+refute(State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ]) :-
+       consume_formula(State, S:(and(Phi, Psi) = f), NewState1),
+       add_formula_if_new(NewState1, S:(Phi = f), NewState2),
+       add_formula_if_new(NewState1, S:(Psi = f), Newstate3),
+       !,
+       applying(f_conj),
+       print(newstate_B1(NewState2)),
+       print(newstate_B2(Newstate3)),
+       refute(NewState2, Rules1), !,
+ 
+     refute(Newstate3, Rules2). 
+
+/*
+
+%%False Conjuction - variation
+
+refute( State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ] ) :-
+        consume_formula( State, S:(and(Phi,Psi)=f), NewState1 ),
+        add_formula_if_new(NewState1, S:(Phi=f), NewState2), !,
+        applying(f_conj),
+        print(newstate_B1(NewState2)),
+        refute(NewState2, Rules1), !,
+        add_formula_if_new(NewState1, S:(Psi = f), Newstate3),
+        print(newstate_B2(Newstate3)),
+        refute(Newstate3, Rules2). 
+
 
 
 %% True disjunction, variation
@@ -243,39 +272,6 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         print(newstate_B2(Newstate3)),
         refute(Newstate3, Rules2). 
         
-
-
-/*
-
-
-%% False Conjuction
-
-refute(State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ]) :-
-       consume_formula(State, S:(and(Phi, Psi) = f), NewState1),
-       add_formula_if_new(NewState1, S:(Phi = f), NewState2),
-       add_formula_if_new(NewState1, S:(Psi = f), Newstate3),
-       !,
-       applying(f_conj),
-       print(newstate_B1(NewState2)),
-       print(newstate_B2(Newstate3)),
-       refute(NewState2, Rules1), !,
-      refute(Newstate3, Rules2). 
-
-/*
-
-False Conjuction - variation
-
-refute( State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ] ) :-
-        consume_formula( State, S:(and(Phi,Psi)=f), NewState1 ),
-        add_formula_if_new(NewState1, S:(Phi=f), NewState2), !,
-        applying(f_conj),
-        print(newstate_B1(NewState2)),
-        refute(NewState2, Rules1), !,
-        add_formula_if_new(NewState1, S:(Psi = f), Newstate3),
-        print(newstate_B2(Newstate3)),
-        refute(Newstate3, Rules2). 
-
-/*
 
 %% True blackdia, branching version
 
@@ -347,6 +343,10 @@ test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p3 = f)],
 /*
 test_object12( [ available = [i:(bdia(p1) = t ), i:(p1 = f), j:(p2 = t)], used = [], relations = []   ] ).
 */
+test_object13([available = [i:(and(p1,p2) = f), i:(p1= t), i:(p2 = t) ], used = [], relations = [] ] ).
+
+
+
 %% ----------------- ADD H-REFLEXIVITY LABELS---------------------
 
 %% This predicate is a variation of list_of_labels: it takes into account also the labels appearing in the 
