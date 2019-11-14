@@ -279,6 +279,8 @@ refute( State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ] ) :-
 
 refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         consume_formula( State, S:(or(Phi,Psi)=t), NewState1 ),
+        \+(add_formula_if_new(NewState1, S:(Phi =t), NewState1)),
+        \+(add_formula_if_new(NewState1, S:(Psi=t), NewState1)),
         add_formula_if_new(NewState1, S:(Phi=t), NewState2), !,
         applying(t_dis),
         print(newstate_B1(NewState2)),
@@ -287,7 +289,21 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         print(newstate_B2(Newstate3)),
         refute(Newstate3, Rules2). 
         
+%% True implication, Non-destructive
 
+refute(State, [t_imply, [t_imply_B1 | Rules1], [t_imply_B2 | Rules2]]) :- 
+       has_available_formula(State, S:(imply(Phi, Psi)= t)),
+       has_relational_formula(State, h(S, T)),
+       add_formula_if_new(State, T:(Phi = f), NewState1), 
+       \+(State = NewState1),!,
+       applying(t_imply),
+       print(newstate_B1(NewState1)),
+       refute(NewState1, Rules1), !, 
+       add_formula_if_new(State, T:(Psi = t), NewState2),
+       \+(State = NewState2),
+       print(newstate_B2(NewState2)),
+       refute(NewState2, Rules2).
+        
 
 
 
@@ -322,7 +338,7 @@ applying( Rule ):- write('Applying: '), write(Rule), nl.
 
 test_object( [available = [i:(and(p,p1)=t), i:(p1=f)], relations= [], used=[]] ).
 
-test_object2( [available = [i: (and(p1, p2) = t)], used=[], relations = [h(i,i), h(i, j)] ] ).
+test_object2( [available = [i: (and(p1, p2) = t), i:(p1 = t), i:(p2=t)], used=[], relations = [h(i,i), h(i, j)] ] ).
 
 test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t) ], used=[], relations = [h(i, k)] ] ).
 
@@ -338,7 +354,7 @@ test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = 
 
 test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
-test_object10( [available = [ i:(or(p1,p2) = t), i:(p2 = f)], used=[], relations = [] ] ).
+test_object10( [available = [ i:(or(p1,p2) = t), i:(p1=t), i:(p2= t)], used=[], relations = [] ] ).
 
 test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p3 = f)], used=[], relations = [] ] ).
 
@@ -346,6 +362,8 @@ test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p3 = f)],
 test_object12( [ available = [i:(bdia(p1) = t ), i:(p1 = f), j:(p2 = t)], used = [], relations = []   ] ).
 */
 test_object13([available = [i:(and(p1,p2) = f), i:(p1= t), i:(p2 = t) ], used = [], relations = [] ] ).
+
+test_object14([available = [i:(imply(p1,p2) = t), i:(p1=t)], used = [], relations = [] ] ).
 
 
 
