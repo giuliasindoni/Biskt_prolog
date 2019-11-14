@@ -215,8 +215,8 @@ refute(State, [f_udia | Rules]) :-
 
 
 
-%% ---------------------- BRANCHING-RULES ------------------------------
-
+%% ---------------------- BRANCHING-RULES AND NON-CREATING ------------------------------
+/*
 %% True disjunction
 refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         consume_formula( State, S:(or(Phi,Psi)=t), NewState1 ),
@@ -243,7 +243,23 @@ refute(State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ]) :-
        refute(NewState2, Rules1), !,
        refute(Newstate3, Rules2). 
 
-/*
+
+%% True blackdia, branching version
+
+refute(State, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
+      consume_formula(State, S:(bdia(Phi) = t), NewState1),
+      has_available_formula(State, Y: (_)),
+      T = @(blackdia(Phi),S),
+      add_formula_if_new(NewState1, Y:(Phi = t), NewState2),
+      add_formula_if_new(NewState1, T:(Phi = t), Newstate3),
+      !,
+      applying(t_blackdia),
+      refute(NewState2, Rules1),
+      refute(Newstate3, Rules2). 
+
+
+*/
+
 
 %%False Conjuction - variation
 
@@ -272,20 +288,7 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
         refute(Newstate3, Rules2). 
         
 
-%% True blackdia, branching version
 
-
-refute(State, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
-      consume_formula(State, S:(bdia(Phi) = t), NewState1),
-      has_available_formula(State, Y: (_)),
-      T = @(blackdia(Phi),S),
-      add_formula_if_new(NewState1, Y:(Phi = t), NewState2),
-      add_formula_if_new(NewState1, T:(Phi = t), Newstate3),
-      !,
-      applying(t_blackdia),
-      refute(NewState2, Rules1),
-      refute(Newstate3, Rules2). 
-*/
 
 
 
