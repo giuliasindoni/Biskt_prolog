@@ -297,8 +297,8 @@ refute( State, [t_dis, [t_dis_B1 | Rules1], [t_dis_B2 | Rules2] ] ) :-
 refute(State, [t_imply, [t_imply_B1 | Rules1], [t_imply_B2 | Rules2]]) :- 
        has_available_formula(State, S:(imply(Phi, Psi)= t)),
        has_relational_formula(State, h(S, T)),
-     %%  \+(add_formula_if_new(State, T:(Phi = f), State)),
-       %%\+(add_formula_if_new(State, T:(Psi = t), State)),
+       \+(add_formula_if_new(State, T:(Phi = f), State)),
+       \+(add_formula_if_new(State, T:(Psi = t), State)),
        add_formula_if_new(State, T:(Phi = f), NewState1), 
        \+(State = NewState1),
        !,
