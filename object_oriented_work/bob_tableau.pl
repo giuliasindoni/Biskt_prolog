@@ -45,16 +45,6 @@ consume_formula( State, Formula, NewState ):-
            set_ob_prop_val( NewState1, used, [Formula | FU], NewState ).
 
 
-/* 
-add_formula_to_available( State, Formula, NewState ) :-
-            ob_prop_val( State, available, FA ),
-            set_ob_prop_val( State, available, [Formula | FA], NewState ).
-
-
-*/
-
-
-
 add_formula_to_available( State, Formula, NewState ) :-
             ob_prop_val( State, available, Available ),
             ( member(Formula, Available) ->  
@@ -131,6 +121,8 @@ refute( State, [t_con | Rules] ):-
 
 refute(State, [f_disj | Rules]) :-
       consume_formula(State, S: (or(Phi, Psi) = f), NewState1),
+      ( \+(add_formula_if_new(NewState1, S:(Phi=f), NewState1 ))  ;   
+          \+(add_formula_if_new(NewState1, S:(Psi = f), NewState1))),
       add_formula_if_new(NewState1, S:(Phi = f), NewState2),
       add_formula_if_new(NewState2, S:(Psi = f), Newstate3),
       !,
@@ -319,7 +311,7 @@ test_object8( [available = [i: (ubox( and(p1, p2) ) = t)], used=[], relations = 
 
 test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [] ] ).
 
-test_object10( [available = [ i:(or(p1,p2) = t), i:(p1=t)], used=[], relations = [] ] ).
+test_object10( [available = [ i:(or(p1,p2) = t)], used=[], relations = [] ] ).
 
 test_object11( [available = [i:(or(p1, or(p2, p3)) =t), i:(p1 = f), i:(p3 = f)], used=[], relations = [] ] ).
 
@@ -329,6 +321,10 @@ test_object12( [ available = [i:(bdia(p1) = t ), i:(p1 = f), j:(p2 = t)], used =
 test_object13([available = [i:(and(p1,p2) = f), i:(p1= f), i:(p2 = t) ], used = [], relations = [] ] ).
 
 test_object14([available = [i:(imply(p1,p2) = t), i:(p1 = t)], used = [], relations = [ ] ] ).
+
+
+test_object15([available = [i:(or(p1,p2) = f), i:(p1 = f), i:(p2 = f)], used = [], relations = [ ] ] ).
+
 
 
 
