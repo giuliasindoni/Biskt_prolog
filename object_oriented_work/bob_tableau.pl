@@ -116,6 +116,8 @@ refute(State, [false_is_true]) :-
 
 refute( State, [t_con | Rules] ):-
       consume_formula( State, S:(and(Phi,Psi)=t), NewState1 ),
+      ( \+(add_formula_if_new(NewState1, S:(Phi=t), NewState1 ))  ;   
+          \+(add_formula_if_new(NewState1, S:(Psi = t), NewState1))),
       add_formula_if_new( NewState1, S:(Phi=t), NewState2 ),
       add_formula_if_new( NewState2, S:(Psi=t), Newstate3 ),
       !,
@@ -260,7 +262,8 @@ refute(State, [t_imply, [t_imply_B1 | Rules1], [t_imply_B2 | Rules2]]) :-
        !,
        applying(t_imply),
        print(newstate_B1(NewState1)),
-       refute(NewState1, Rules1), !, 
+       refute(NewState1, Rules1),
+       !, 
        add_formula_if_new(State, T:(Psi = t), NewState2),
        \+(State = NewState2),
        print(newstate_B2(NewState2)),
@@ -300,7 +303,7 @@ applying( Rule ):- write('Applying: '), write(Rule), nl.
 
 test_object( [available = [i:(and(p,p1)=t), i:(p1=f)], relations= [], used=[]] ).
 
-test_object2( [available = [i: (and(p1, p2) = t), i:(p1 = t), i:(p2=t)], used=[], relations = [h(i,i), h(i, j)] ] ).
+test_object2( [available = [i: (and(p1, p2) = t), i:(p1 = f), i:(p2 = f)], used=[], relations = [ ] ] ).
 
 test_object3( [available = [i: (nneg(p1) = t), w:(nneg(p1) = t) ], used=[], relations = [h(i, k)] ] ).
 
