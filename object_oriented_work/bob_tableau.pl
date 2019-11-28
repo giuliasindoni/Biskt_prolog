@@ -106,8 +106,6 @@ refute(State, [false_is_true]) :-
 
 refute( State, [t_con | Rules] ):-
       consume_formula( State, S:(and(Phi,Psi)=t), NewState1 ),
-    %%  ( \+(add_formula_if_new(NewState1, S:(Phi=t), NewState1 ))  ;   
-    %%  \+(add_formula_if_new(NewState1, S:(Psi = t), NewState1))),
       add_formula_if_new( NewState1, S:(Phi=t), NewState2 ),
       add_formula_if_new( NewState2, S:(Psi=t), Newstate3 ),
       (\+(NewState1 = NewState2) ;
@@ -123,8 +121,6 @@ refute( State, [t_con | Rules] ):-
 
 refute(State, [f_disj | Rules]) :-
       consume_formula(State, S: (or(Phi, Psi) = f), NewState1),
-    %%  ( \+(add_formula_if_new(NewState1, S:(Phi=f), NewState1 ))  ;   
-     %%     \+(add_formula_if_new(NewState1, S:(Psi = f), NewState1))),
       add_formula_if_new(NewState1, S:(Phi = f), NewState2),
       add_formula_if_new(NewState2, S:(Psi = f), Newstate3),
       (\+(NewState1 = NewState2) ;
