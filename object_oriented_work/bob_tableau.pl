@@ -217,22 +217,22 @@ refute(State, [f_udia | Rules]) :-
 
 refute( State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ] ) :-
         consume_formula( State, S:(and(Phi,Psi)=f), NewState1 ),
-     %%   \+(add_formula_if_new(NewState1, S:(Phi =f), NewState1)),
-     %%   \+(add_formula_if_new(NewState1, S:(Psi=f), NewState1)),
+        \+(add_formula_if_new(NewState1, S:(Phi =f), NewState1)),
+        \+(add_formula_if_new(NewState1, S:(Psi=f), NewState1)),
         add_formula_if_new(NewState1, S:(Phi=f), NewState2),
-        \+(NewState1 = NewState2),
+     %%   \+(NewState1 = NewState2),
         !,
         applying(f_conj),
         print(newstate_B1(NewState2)),
         refute(NewState2, Rules1), !,
         add_formula_if_new(NewState1, S:(Psi = f), Newstate3),
-        \+(NewState1 = Newstate3),
+      %%  \+(NewState1 = Newstate3),
         print(newstate_B2(Newstate3)),
         refute(Newstate3, Rules2). 
 
 /*
 
-%% False Conjuction
+%% False Conjuction -- old version 
 refute(State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ]) :-
        consume_formula(State, S:(and(Phi, Psi) = f), NewState1),
        add_formula_if_new(NewState1, S:(Phi = f), NewState2),
