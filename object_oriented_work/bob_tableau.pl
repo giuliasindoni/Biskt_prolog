@@ -213,19 +213,40 @@ refute(State, [f_udia | Rules]) :-
 
 %%False Conjuction
 
+
+
 refute( State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ] ) :-
         consume_formula( State, S:(and(Phi,Psi)=f), NewState1 ),
-        \+(add_formula_if_new(NewState1, S:(Phi =f), NewState1)),
-        \+(add_formula_if_new(NewState1, S:(Psi=f), NewState1)),
-        add_formula_if_new(NewState1, S:(Phi=f), NewState2), !,
+     %%   \+(add_formula_if_new(NewState1, S:(Phi =f), NewState1)),
+     %%   \+(add_formula_if_new(NewState1, S:(Psi=f), NewState1)),
+        add_formula_if_new(NewState1, S:(Phi=f), NewState2),
+        \+(NewState1 = NewState2),
+        !,
         applying(f_conj),
         print(newstate_B1(NewState2)),
         refute(NewState2, Rules1), !,
         add_formula_if_new(NewState1, S:(Psi = f), Newstate3),
+        \+(NewState1 = Newstate3),
         print(newstate_B2(Newstate3)),
         refute(Newstate3, Rules2). 
 
+/*
 
+%% False Conjuction
+refute(State, [f_conj, [f_conj_B1 | Rules1], [f_conj_B2 | Rules2] ]) :-
+       consume_formula(State, S:(and(Phi, Psi) = f), NewState1),
+       add_formula_if_new(NewState1, S:(Phi = f), NewState2),
+       add_formula_if_new(NewState1, S:(Psi = f), Newstate3),
+       \+(NewState1 = NewState2),
+       \+(NewState1 = Newstate3),
+       !,
+       applying(f_conj),
+       print(newstate_B1(NewState2)),
+       print(newstate_B2(Newstate3)),
+       refute(NewState2, Rules1), !,
+      refute(Newstate3, Rules2). 
+
+*/
 
 %% True disjunction
 
@@ -250,14 +271,14 @@ refute(State, [t_imply, [t_imply_B1 | Rules1], [t_imply_B2 | Rules2]]) :-
        \+(add_formula_if_new(State, T:(Phi = f), State)),
        \+(add_formula_if_new(State, T:(Psi = t), State)),
        add_formula_if_new(State, T:(Phi = f), NewState1), 
-       \+(State = NewState1),
+   %%    \+(State = NewState1),
        !,
        applying(t_imply),
        print(newstate_B1(NewState1)),
        refute(NewState1, Rules1),
        !, 
        add_formula_if_new(State, T:(Psi = t), NewState2),
-       \+(State = NewState2),
+%%       \+(State = NewState2),
        print(newstate_B2(NewState2)),
        refute(NewState2, Rules2).
         
@@ -313,14 +334,15 @@ test_object9( [available = [i: (udia( or(p1, p2) ) = f)], used=[], relations = [
 
 test_object10( [available = [ i:(or(p1,p2) = t)], used=[], relations = [] ] ).
 
-test_object11( [available = [i: (or(p1, or(p2, p3)) = f ), i:(p2 = t), i:(p3 = t) ], used=[], relations = [] ] ).
+test_object11( [available = [i: (or(p1, or(p2, p3)) = f ), i:(p1 = f), i:(p3 = t) ], used=[], relations = [] ] ).
 
 /*
 test_object12( [ available = [i:(bdia(p1) = t ), i:(p1 = f), j:(p2 = t)], used = [], relations = []   ] ).
 */
-test_object13([available = [i:(and(p1,p2) = f), i:(p1= f), i:(p2 = t) ], used = [], relations = [] ] ).
+test_object13([available = [i:(and(p1,p2) = f), i:(p2 = f) ], used = [], relations = [] ] ).
 
-test_object14([available = [i:(imply(p1,p2) = t), i:(p1 = t)], used = [], relations = [ ] ] ).
+
+test_object14([available = [i:(imply(p1,p2) = t), i:(p2 = f)], used = [], relations = [ ] ] ).
 
 
 test_object15([available = [i:(or(p1,p2) = f), i:(p1 = t), i:(p2 = t)], used = [], relations = [ ] ] ).
