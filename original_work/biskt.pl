@@ -481,8 +481,6 @@ example(10, [],
 example(11, [],
             i:(imp((or(blackdia(p1) ,blackdia(p2))), (blackdia(or(p1, p2)))) = t )).
 
-%% Example12: not sure this actually works: the last rule applied is true conj for some odd reason
-%% it should be tf_close
 
 example(12, [], i: (imp(udia(and( eneg(nneg(p1)) , p2) ), udia(and(p1, eneg(nneg(p2))) ) )  = t)).
 
@@ -548,13 +546,18 @@ example(28, [],
   i: ( imp(udia(eneg(nneg(p))), udia(p)) = t )).
 
 
-example(29, [], 
+example(29, [i:(p1=f)], 
   i:(or(p1,p2) = f )).
 
 
 example(30, [i:(p1 = f), i:(p3 = f)],
           i:(or(p1, or(p2, p3)) = f)).
 
+example(31, [],
+              i:(and(p1,p2) = f)).
+
+
+example(32, [], i: (imp( and(p1, and(eneg(nneg(p1)), nneg(nneg(eneg(p1))))), (and(nneg(nneg(and(p1, eneg(p1)))) , p1)) )  = t)).
 
 
 prove( EgN, Rules ) :-
