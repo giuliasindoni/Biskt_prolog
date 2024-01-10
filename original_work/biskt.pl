@@ -1,10 +1,4 @@
 
-%% TO DO LIST
-%% Add a predicate "add_if_new" to add new formulae to
-%% a branch. This would only add formulae that are not
-%% already present in the branch.
-
-
 %% This just to write the status.
 %% We need fail because otherwise everything is going to match
 %% to thus first "rule" and will produce a closed refutation tableau
@@ -271,38 +265,6 @@ refute(Formulae, [f_whitebox | Rules]) :-
         refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules). 
 
 
-/*
-
-%% False white box, branching version
-
-refute(Formulae, [f_whitebox, [f_whitebox_B1 | Rules1], [f_whitebox_B2 | Rules2]]) :-
-        select(S: (whitebox(Phi) = f), Formulae, Rest),
-        ( \+(member(r(S, X), Rest))  ;
-        \+( member(X:(Phi = f), Rest))),
-        !,
-        applying(f_whitebox),
-        T =  @(whitebox(Phi),S),
-        refute([r(S, S), S:(Phi = f) | Rest ], Rules1),
-        refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules2). 
-
-
-%% False white box, second branching version
-
-refute(Formulae, [f_whitebox, [f_whitebox_B1 | Rules1], [f_whitebox_B2 | Rules2]]) :-
-      select(S: (whitebox(Phi) = f), Formulae, Rest),
-      member(Y:(_), Formulae),
-      ( \+(member(r(S, X), Rest))  ;
-        \+( member(X:(Phi =f), Rest))),
-      !,
-      applying(f_whitebox),
-      T = @(whitebox(Phi),S),
-      refute([r(S, Y), Y:(Phi = f) | Rest], Rules1),
-      refute([r(S, T), h(T,T), T: (Phi = f) | Rest], Rules2).
-
-*/
-
-
-
 %% True black dia
 
 refute(Formulae, [t_blackdia | Rules]) :-
@@ -313,37 +275,7 @@ refute(Formulae, [t_blackdia | Rules]) :-
       applying(t_blackdia),
       T = @(blackdia(Phi),S),
       refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules).
-/*
 
-%% True black dia, branching version
-
-refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
-      select(S: (blackdia(Phi) = t), Formulae, Rest),
-      ( \+(member(r(X, S), Rest))  ;
-        \+( member(X:(Phi =t), Rest))),
-      !,
-      applying(t_blackdia),
-      T = @(blackdia(Phi),S),
-      refute([r(S, S), S:(Phi = t) | Rest], Rules1),
-      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
-
-
-
-
-%% True black dia, second branching version
-
-refute(Formulae, [t_blackdia, [t_blackdia_B1 | Rules1], [t_blackdia_B2 | Rules2]]) :-
-      select(S: (blackdia(Phi) = t), Formulae, Rest),
-      member(Y:(_), Formulae),
-      ( \+(member(r(X, S), Rest))  ;
-        \+( member(X:(Phi =t), Rest))),
-      !,
-      applying(t_blackdia),
-      T = @(blackdia(Phi),S),
-      refute([r(Y, S), Y:(Phi = t) | Rest], Rules1),
-      refute([r(T, S), h(T,T), T: (Phi = t) | Rest], Rules2).
-
-*/
 
 %% False universal box
 
