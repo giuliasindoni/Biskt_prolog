@@ -1,8 +1,8 @@
 
 %% This just to write the status.
 %% We need fail because otherwise everything is going to match
-%% to thus first "rule" and will produce a closed refutation tableau
-%% if this we add the fail goal
+%% to this first "rule" and will produce a closed refutation tableau
+%% if we add the fail goal
 %% we will make sure we can go to the other refute predicates as well
 refute( Formulae, _ ) :-
         write( 'refute: ' ), write(Formulae), nl,
